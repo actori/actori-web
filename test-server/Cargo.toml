@@ -1,13 +1,13 @@
 [package]
-name = "actix-http-test"
+name = "actori-http-test"
 version = "1.0.0"
-authors = ["Nikolay Kim <fafhrd91@gmail.com>"]
-description = "Actix http test server"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Actori http test server"
 readme = "README.md"
 keywords = ["http", "web", "framework", "async", "futures"]
-homepage = "https://actix.rs"
-repository = "https://github.com/actix/actix-web.git"
-documentation = "https://docs.rs/actix-http-test/"
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-http-test/"
 categories = ["network-programming", "asynchronous",
               "web-programming::http-server",
               "web-programming::websocket"]
@@ -20,7 +20,7 @@ workspace = ".."
 features = []
 
 [lib]
-name = "actix_http_test"
+name = "actori_http_test"
 path = "src/lib.rs"
 
 [features]
@@ -30,13 +30,13 @@ default = []
 openssl = ["open-ssl", "awc/openssl"]
 
 [dependencies]
-actix-service = "1.0.1"
-actix-codec = "0.2.0"
-actix-connect = "1.0.0"
-actix-utils = "1.0.3"
-actix-rt = "1.0.0"
-actix-server = "1.0.0"
-actix-testing = "1.0.0"
+actori-service = "1.0.5"
+actori-codec = "0.2.0"
+actori-connect = "1.0.0"
+actori-utils = "1.0.6"
+actori-rt = "1.0.0"
+actori-server = "1.0.1"
+actori-testing = "1.0.0"
 awc = "1.0.0"
 
 base64 = "0.11"
@@ -55,5 +55,5 @@ time = "0.1"
 open-ssl = { version="0.10", package="openssl", optional = true }
 
 [dev-dependencies]
-actix-web = "2.0.0-rc"
-actix-http = "1.0.1"
+actori-web = "2.0.0-rc"
+actori-http = "1.0.1"

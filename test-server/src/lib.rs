@@ -1,35 +1,35 @@
-//! Various helpers for Actix applications to use during testing.
+//! Various helpers for Actori applications to use during testing.
 use std::sync::mpsc;
 use std::{net, thread, time};
 
-use actix_codec::{AsyncRead, AsyncWrite, Framed};
-use actix_rt::{net::TcpStream, System};
-use actix_server::{Server, ServiceFactory};
+use actori_codec::{AsyncRead, AsyncWrite, Framed};
+use actori_rt::{net::TcpStream, System};
+use actori_server::{Server, ServiceFactory};
 use awc::{error::PayloadError, ws, Client, ClientRequest, ClientResponse, Connector};
 use bytes::Bytes;
 use futures::Stream;
 use http::Method;
 use net2::TcpBuilder;
 
-pub use actix_testing::*;
+pub use actori_testing::*;
 
 /// Start test server
 ///
 /// `TestServer` is very simple test server that simplify process of writing
-/// integration tests cases for actix web applications.
+/// integration tests cases for actori web applications.
 ///
 /// # Examples
 ///
 /// ```rust
-/// use actix_http::HttpService;
-/// use actix_http_test::TestServer;
-/// use actix_web::{web, App, HttpResponse, Error};
+/// use actori_http::HttpService;
+/// use actori_http_test::TestServer;
+/// use actori_web::{web, App, HttpResponse, Error};
 ///
 /// async fn my_handler() -> Result<HttpResponse, Error> {
 ///     Ok(HttpResponse::Ok().into())
 /// }
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_example() {
 ///     let mut srv = TestServer::start(
 ///         || HttpService::new(
@@ -48,7 +48,7 @@ pub fn test_server<F: ServiceFactory<TcpStream>>(factory: F) -> TestServer {
 
     // run server in separate thread
     thread::spawn(move || {
-        let sys = System::new("actix-test-server");
+        let sys = System::new("actori-test-server");
         let tcp = net::TcpListener::bind("127.0.0.1:0").unwrap();
         let local_addr = tcp.local_addr().unwrap();
 
@@ -92,7 +92,7 @@ pub fn test_server<F: ServiceFactory<TcpStream>>(factory: F) -> TestServer {
 
         Client::build().connector(connector).finish()
     };
-    actix_connect::start_default_resolver();
+    actori_connect::start_default_resolver();
 
     TestServer {
         addr,
