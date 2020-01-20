@@ -1,0 +1,68 @@
+[package]
+name = "actoriwc"
+version = "1.0.1"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Actori http client."
+readme = "README.md"
+keywords = ["actori", "http", "framework", "async", "web"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actoriwc/"
+categories = ["network-programming", "asynchronous",
+              "web-programming::http-client",
+              "web-programming::websocket"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[lib]
+name = "actoriwc"
+path = "src/lib.rs"
+
+[package.metadata.docs.rs]
+features = ["openssl", "rustls", "compress"]
+
+[features]
+default = ["compress"]
+
+# openssl
+openssl = ["open-ssl", "actori-http/openssl"]
+
+# rustls
+rustls = ["rust-tls", "actori-http/rustls"]
+
+# content-encoding support
+compress = ["actori-http/compress"]
+
+[dependencies]
+actori-codec = "0.2.0"
+actori-service = "1.0.5"
+actori-http = "1.0.1"
+actori-rt = "1.0.0"
+
+base64 = "0.11"
+bytes = "0.5.3"
+derive_more = "0.99.2"
+futures-core = "0.3.1"
+log =" 0.4"
+mime = "0.3"
+percent-encoding = "2.1"
+rand = "0.7"
+serde = "1.0"
+serde_json = "1.0"
+serde_urlencoded = "0.6.1"
+open-ssl = { version="0.10", package="openssl", optional = true }
+rust-tls = { version = "0.16.0", package="rustls", optional = true, features = ["dangerous_configuration"]  }
+
+[dev-dependencies]
+actori-connect = { version = "1.0.2", features=["openssl"] }
+actori-web = { version = "2.0.0-rc", features=["openssl"] }
+actori-http = { version = "1.0.1", features=["openssl"] }
+actori-http-test = { version = "1.0.0", features=["openssl"] }
+actori-utils = "1.0.6"
+actori-server = "1.0.1"
+actori-tls = { version = "1.0.0", features=["openssl", "rustls"] }
+brotli2 = "0.3.2"
+flate2 = "1.0.13"
+futures = "0.3.1"
+env_logger = "0.6"
+webpki = "0.21"
