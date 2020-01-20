@@ -1,16 +1,16 @@
-use actix_http::Error;
+use actori_http::Error;
 
-#[actix_rt::main]
+#[actori_rt::main]
 async fn main() -> Result<(), Error> {
-    std::env::set_var("RUST_LOG", "actix_http=trace");
+    std::env::set_var("RUST_LOG", "actori_http=trace");
     env_logger::init();
 
-    let client = awc::Client::new();
+    let client = actoriwc::Client::new();
 
     // Create request builder, configure request and send
     let mut response = client
         .get("https://www.rust-lang.org/")
-        .header("User-Agent", "Actix-web")
+        .header("User-Agent", "Actori-web")
         .send()
         .await?;
 

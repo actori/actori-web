@@ -1,4 +1,4 @@
-use actix_web::{
+use actori_web::{
     get, middleware, web, App, Error, HttpRequest, HttpResponse, HttpServer,
 };
 
@@ -19,9 +19,9 @@ async fn no_params() -> &'static str {
 }
 
 #[cfg(unix)]
-#[actix_rt::main]
+#[actori_rt::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info");
+    std::env::set_var("RUST_LOG", "actori_server=info,actori_web=info");
     env_logger::init();
 
     HttpServer::new(|| {

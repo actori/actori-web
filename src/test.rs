@@ -1,22 +1,22 @@
-//! Various helpers for Actix applications to use during testing.
+//! Various helpers for Actori applications to use during testing.
 use std::convert::TryFrom;
 use std::net::SocketAddr;
 use std::rc::Rc;
 use std::sync::mpsc;
 use std::{fmt, net, thread, time};
 
-use actix_codec::{AsyncRead, AsyncWrite, Framed};
-use actix_http::http::header::{ContentType, Header, HeaderName, IntoHeaderValue};
-use actix_http::http::{Error as HttpError, Method, StatusCode, Uri, Version};
-use actix_http::test::TestRequest as HttpTestRequest;
-use actix_http::{cookie::Cookie, ws, Extensions, HttpService, Request};
-use actix_router::{Path, ResourceDef, Url};
-use actix_rt::{time::delay_for, System};
-use actix_service::{
+use actori_codec::{AsyncRead, AsyncWrite, Framed};
+use actori_http::http::header::{ContentType, Header, HeaderName, IntoHeaderValue};
+use actori_http::http::{Error as HttpError, Method, StatusCode, Uri, Version};
+use actori_http::test::TestRequest as HttpTestRequest;
+use actori_http::{cookie::Cookie, ws, Extensions, HttpService, Request};
+use actori_router::{Path, ResourceDef, Url};
+use actori_rt::{time::delay_for, System};
+use actori_service::{
     map_config, IntoService, IntoServiceFactory, Service, ServiceFactory,
 };
-use awc::error::PayloadError;
-use awc::{Client, ClientRequest, ClientResponse, Connector};
+use actoriwc::error::PayloadError;
+use actoriwc::{Client, ClientRequest, ClientResponse, Connector};
 use bytes::{Bytes, BytesMut};
 use futures::future::ok;
 use futures::stream::{Stream, StreamExt};
@@ -25,7 +25,7 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json;
 
-pub use actix_http::test::TestBuffer;
+pub use actori_http::test::TestBuffer;
 
 use crate::config::AppConfig;
 use crate::data::Data;
@@ -57,10 +57,10 @@ pub fn default_service(
 /// service.
 ///
 /// ```rust
-/// use actix_service::Service;
-/// use actix_web::{test, web, App, HttpResponse, http::StatusCode};
+/// use actori_service::Service;
+/// use actori_web::{test, web, App, HttpResponse, http::StatusCode};
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_init_service() {
 ///     let mut app = test::init_service(
 ///         App::new()
@@ -95,8 +95,8 @@ where
 /// Calls service and waits for response future completion.
 ///
 /// ```rust
-/// use actix_web::{test, App, HttpResponse, http::StatusCode};
-/// use actix_service::Service;
+/// use actori_web::{test, App, HttpResponse, http::StatusCode};
+/// use actori_service::Service;
 ///
 /// #[test]
 /// fn test_response() {
@@ -126,10 +126,10 @@ where
 /// Helper function that returns a response body of a TestRequest
 ///
 /// ```rust
-/// use actix_web::{test, web, App, HttpResponse, http::header};
+/// use actori_web::{test, web, App, HttpResponse, http::header};
 /// use bytes::Bytes;
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_index() {
 ///     let mut app = test::init_service(
 ///         App::new().service(
@@ -169,10 +169,10 @@ where
 /// Helper function that returns a response body of a ServiceResponse.
 ///
 /// ```rust
-/// use actix_web::{test, web, App, HttpResponse, http::header};
+/// use actori_web::{test, web, App, HttpResponse, http::header};
 /// use bytes::Bytes;
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_index() {
 ///     let mut app = test::init_service(
 ///         App::new().service(
@@ -218,7 +218,7 @@ where
 /// Helper function that returns a deserialized response body of a TestRequest
 ///
 /// ```rust
-/// use actix_web::{App, test, web, HttpResponse, http::header};
+/// use actori_web::{App, test, web, HttpResponse, http::header};
 /// use serde::{Serialize, Deserialize};
 ///
 /// #[derive(Serialize, Deserialize)]
@@ -227,7 +227,7 @@ where
 ///     name: String
 /// }
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_add_person() {
 ///     let mut app = test::init_service(
 ///         App::new().service(
@@ -263,16 +263,16 @@ where
 
 /// Test `Request` builder.
 ///
-/// For unit testing, actix provides a request builder type and a simple handler runner. TestRequest implements a builder-like pattern.
+/// For unit testing, actori provides a request builder type and a simple handler runner. TestRequest implements a builder-like pattern.
 /// You can generate various types of request via TestRequest's methods:
-///  * `TestRequest::to_request` creates `actix_http::Request` instance.
+///  * `TestRequest::to_request` creates `actori_http::Request` instance.
 ///  * `TestRequest::to_srv_request` creates `ServiceRequest` instance, which is used for testing middlewares and chain adapters.
 ///  * `TestRequest::to_srv_response` creates `ServiceResponse` instance.
 ///  * `TestRequest::to_http_request` creates `HttpRequest` instance, which is used for testing handlers.
 ///
 /// ```rust
-/// use actix_web::{test, HttpRequest, HttpResponse, HttpMessage};
-/// use actix_web::http::{header, StatusCode};
+/// use actori_web::{test, HttpRequest, HttpResponse, HttpMessage};
+/// use actori_web::http::{header, StatusCode};
 ///
 /// async fn index(req: HttpRequest) -> HttpResponse {
 ///     if let Some(hdr) = req.headers().get(header::CONTENT_TYPE) {
@@ -533,18 +533,18 @@ impl TestRequest {
 /// Start test server with default configuration
 ///
 /// Test server is very simple server that simplify process of writing
-/// integration tests cases for actix web applications.
+/// integration tests cases for actori web applications.
 ///
 /// # Examples
 ///
 /// ```rust
-/// use actix_web::{web, test, App, HttpResponse, Error};
+/// use actori_web::{web, test, App, HttpResponse, Error};
 ///
 /// async fn my_handler() -> Result<HttpResponse, Error> {
 ///     Ok(HttpResponse::Ok().into())
 /// }
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_example() {
 ///     let mut srv = test::start(
 ///         || App::new().service(
@@ -578,13 +578,13 @@ where
 /// # Examples
 ///
 /// ```rust
-/// use actix_web::{web, test, App, HttpResponse, Error};
+/// use actori_web::{web, test, App, HttpResponse, Error};
 ///
 /// async fn my_handler() -> Result<HttpResponse, Error> {
 ///     Ok(HttpResponse::Ok().into())
 /// }
 ///
-/// #[actix_rt::test]
+/// #[actori_rt::test]
 /// async fn test_example() {
 ///     let mut srv = test::start_with(test::config().h1(), ||
 ///         App::new().service(web::resource("/").to(my_handler))
@@ -618,7 +618,7 @@ where
 
     // run server in separate thread
     thread::spawn(move || {
-        let sys = System::new("actix-test-server");
+        let sys = System::new("actori-test-server");
         let tcp = net::TcpListener::bind("127.0.0.1:0").unwrap();
         let local_addr = tcp.local_addr().unwrap();
         let factory = factory.clone();
@@ -845,8 +845,8 @@ pub fn unused_addr() -> net::SocketAddr {
 /// Test server controller
 pub struct TestServer {
     addr: net::SocketAddr,
-    client: awc::Client,
-    system: actix_rt::System,
+    client: actoriwc::Client,
+    system: actori_rt::System,
     ssl: bool,
     server: Server,
 }
@@ -922,7 +922,7 @@ impl TestServer {
     pub async fn ws_at(
         &mut self,
         path: &str,
-    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, awc::error::WsClientError>
+    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, actoriwc::error::WsClientError>
     {
         let url = self.url(path);
         let connect = self.client.ws(url).connect();
@@ -932,7 +932,7 @@ impl TestServer {
     /// Connect to a websocket server
     pub async fn ws(
         &mut self,
-    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, awc::error::WsClientError>
+    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, actoriwc::error::WsClientError>
     {
         self.ws_at("/").await
     }
@@ -953,7 +953,7 @@ impl Drop for TestServer {
 
 #[cfg(test)]
 mod tests {
-    use actix_http::httpmessage::HttpMessage;
+    use actori_http::httpmessage::HttpMessage;
     use futures::FutureExt;
     use serde::{Deserialize, Serialize};
     use std::time::SystemTime;
@@ -961,7 +961,7 @@ mod tests {
     use super::*;
     use crate::{http::header, web, App, HttpResponse, Responder};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_basics() {
         let req = TestRequest::with_hdr(header::ContentType::json())
             .version(Version::HTTP_2)
@@ -988,7 +988,7 @@ mod tests {
         assert_eq!(*data, 20);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_methods() {
         let mut app = init_service(
             App::new().service(
@@ -1026,7 +1026,7 @@ mod tests {
         assert_eq!(result, Bytes::from_static(b"delete!"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_response() {
         let mut app =
             init_service(App::new().service(web::resource("/index.html").route(
@@ -1049,7 +1049,7 @@ mod tests {
         name: String,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_response_json() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
             web::post().to(|person: web::Json<Person>| {
@@ -1070,7 +1070,7 @@ mod tests {
         assert_eq!(&result.id, "12345");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_response_form() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
             web::post().to(|person: web::Form<Person>| {
@@ -1096,7 +1096,7 @@ mod tests {
         assert_eq!(&result.name, "User name");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_response_json() {
         let mut app = init_service(App::new().service(web::resource("/people").route(
             web::post().to(|person: web::Json<Person>| {
@@ -1122,7 +1122,7 @@ mod tests {
         assert_eq!(&result.name, "User name");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_async_with_block() {
         async fn async_with_block() -> Result<HttpResponse, Error> {
             let res = web::block(move || Some(4usize).ok_or("wrong")).await;
@@ -1145,7 +1145,7 @@ mod tests {
         assert!(res.status().is_success());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_server_data() {
         async fn handler(data: web::Data<usize>) -> impl Responder {
             assert_eq!(**data, 10);
@@ -1164,20 +1164,20 @@ mod tests {
         assert!(res.status().is_success());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_actor() {
-        use actix::Actor;
+        use actori::Actor;
 
         struct MyActor;
 
         struct Num(usize);
-        impl actix::Message for Num {
+        impl actori::Message for Num {
             type Result = usize;
         }
-        impl actix::Actor for MyActor {
-            type Context = actix::Context<Self>;
+        impl actori::Actor for MyActor {
+            type Context = actori::Context<Self>;
         }
-        impl actix::Handler<Num> for MyActor {
+        impl actori::Handler<Num> for MyActor {
             type Result = usize;
             fn handle(&mut self, msg: Num, _: &mut Self::Context) -> Self::Result {
                 msg.0

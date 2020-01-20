@@ -13,8 +13,8 @@ use serde::de::DeserializeOwned;
 use serde::Serialize;
 use serde_json;
 
-use actix_http::http::{header::CONTENT_LENGTH, StatusCode};
-use actix_http::{HttpMessage, Payload, Response};
+use actori_http::http::{header::CONTENT_LENGTH, StatusCode};
+use actori_http::{HttpMessage, Payload, Response};
 
 #[cfg(feature = "compress")]
 use crate::dev::Decompress;
@@ -38,7 +38,7 @@ use crate::responder::Responder;
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -65,7 +65,7 @@ use crate::responder::Responder;
 /// trait from *serde*.
 ///
 /// ```rust
-/// use actix_web::*;
+/// use actori_web::*;
 /// use serde_derive::Serialize;
 ///
 /// #[derive(Serialize)]
@@ -149,7 +149,7 @@ impl<T: Serialize> Responder for Json<T> {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -209,7 +209,7 @@ where
 /// Json extractor configuration
 ///
 /// ```rust
-/// use actix_web::{error, web, App, FromRequest, HttpResponse};
+/// use actori_web::{error, web, App, FromRequest, HttpResponse};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -433,7 +433,7 @@ mod tests {
         }
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_responder() {
         let req = TestRequest::default().to_http_request();
 
@@ -451,7 +451,7 @@ mod tests {
         assert_eq!(resp.body().bin_ref(), b"{\"name\":\"test\"}");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_custom_error_responder() {
         let (req, mut pl) = TestRequest::default()
             .header(
@@ -482,7 +482,7 @@ mod tests {
         assert_eq!(msg.name, "invalid request");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_extract() {
         let (req, mut pl) = TestRequest::default()
             .header(
@@ -542,7 +542,7 @@ mod tests {
         assert!(format!("{}", s.err().unwrap()).contains("Content type error"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_json_body() {
         let (req, mut pl) = TestRequest::default().to_http_parts();
         let json = JsonBody::<MyObject>::new(&req, &mut pl, None).await;
@@ -594,7 +594,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_with_json_and_bad_content_type() {
         let (req, mut pl) = TestRequest::with_header(
             header::CONTENT_TYPE,
@@ -612,7 +612,7 @@ mod tests {
         assert!(s.is_err())
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_with_json_and_good_custom_content_type() {
         let (req, mut pl) = TestRequest::with_header(
             header::CONTENT_TYPE,
@@ -632,7 +632,7 @@ mod tests {
         assert!(s.is_ok())
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_with_json_and_bad_custom_content_type() {
         let (req, mut pl) = TestRequest::with_header(
             header::CONTENT_TYPE,

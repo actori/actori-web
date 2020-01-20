@@ -1,9 +1,9 @@
 use std::net::SocketAddr;
 use std::rc::Rc;
 
-use actix_http::Extensions;
-use actix_router::ResourceDef;
-use actix_service::{boxed, IntoServiceFactory, ServiceFactory};
+use actori_http::Extensions;
+use actori_router::ResourceDef;
+use actori_service::{boxed, IntoServiceFactory, ServiceFactory};
 
 use crate::data::{Data, DataFactory};
 use crate::error::Error;
@@ -241,7 +241,7 @@ impl ServiceConfig {
 
 #[cfg(test)]
 mod tests {
-    use actix_service::Service;
+    use actori_service::Service;
     use bytes::Bytes;
 
     use super::*;
@@ -249,7 +249,7 @@ mod tests {
     use crate::test::{call_service, init_service, read_body, TestRequest};
     use crate::{web, App, HttpRequest, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data() {
         let cfg = |cfg: &mut ServiceConfig| {
             cfg.data(10usize);
@@ -265,7 +265,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    // #[actix_rt::test]
+    // #[actori_rt::test]
     // async fn test_data_factory() {
     //     let cfg = |cfg: &mut ServiceConfig| {
     //         cfg.data_factory(|| {
@@ -297,7 +297,7 @@ mod tests {
     //     assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
     // }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_external_resource() {
         let mut srv = init_service(
             App::new()
@@ -325,7 +325,7 @@ mod tests {
         assert_eq!(body, Bytes::from_static(b"https://youtube.com/watch/12345"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_service() {
         let mut srv = init_service(App::new().configure(|cfg| {
             cfg.service(

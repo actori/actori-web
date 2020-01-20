@@ -2,9 +2,9 @@ use std::cell::{Ref, RefCell, RefMut};
 use std::rc::Rc;
 use std::{fmt, net};
 
-use actix_http::http::{HeaderMap, Method, Uri, Version};
-use actix_http::{Error, Extensions, HttpMessage, Message, Payload, RequestHead};
-use actix_router::{Path, Url};
+use actori_http::http::{HeaderMap, Method, Uri, Version};
+use actori_http::{Error, Extensions, HttpMessage, Message, Payload, RequestHead};
+use actori_router::{Path, Url};
 use futures::future::{ok, Ready};
 
 use crate::config::AppConfig;
@@ -137,8 +137,8 @@ impl HttpRequest {
     /// Generate url for named resource
     ///
     /// ```rust
-    /// # extern crate actix_web;
-    /// # use actix_web::{web, App, HttpRequest, HttpResponse};
+    /// # extern crate actori_web;
+    /// # use actori_web::{web, App, HttpRequest, HttpResponse};
     /// #
     /// fn index(req: HttpRequest) -> HttpResponse {
     ///     let url = req.url_for("foo", &["1", "2", "3"]); // <- generate url for "foo" resource
@@ -183,7 +183,7 @@ impl HttpRequest {
     /// Peer socket address
     ///
     /// Peer address is actual socket address, if proxy is used in front of
-    /// actix http server, then peer address would be address of this proxy.
+    /// actori http server, then peer address would be address of this proxy.
     ///
     /// To get client connection information `.connection_info()` should be used.
     #[inline]
@@ -267,7 +267,7 @@ impl Drop for HttpRequest {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App, HttpRequest};
+/// use actori_web::{web, App, HttpRequest};
 /// use serde_derive::Deserialize;
 ///
 /// /// extract `Thing` from request
@@ -461,7 +461,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data() {
         let mut srv = init_service(App::new().app_data(10usize).service(
             web::resource("/").to(|req: HttpRequest| {
@@ -494,7 +494,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_extensions_dropped() {
         struct Tracker {
             pub dropped: bool,

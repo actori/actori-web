@@ -4,10 +4,10 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_http::{Extensions, Response};
-use actix_router::{ResourceDef, ResourceInfo, Router};
-use actix_service::boxed::{self, BoxService, BoxServiceFactory};
-use actix_service::{
+use actori_http::{Extensions, Response};
+use actori_router::{ResourceDef, ResourceInfo, Router};
+use actori_service::boxed::{self, BoxService, BoxServiceFactory};
+use actori_service::{
     apply, apply_fn_factory, IntoServiceFactory, Service, ServiceFactory, Transform,
 };
 use futures::future::{ok, Either, Future, LocalBoxFuture, Ready};
@@ -41,7 +41,7 @@ type BoxedResponse = LocalBoxFuture<'static, Result<ServiceResponse, Error>>;
 /// `Path` extractor also is able to extract scope level variable segments.
 ///
 /// ```rust
-/// use actix_web::{web, App, HttpResponse};
+/// use actori_web::{web, App, HttpResponse};
 ///
 /// fn main() {
 ///     let app = App::new().service(
@@ -99,7 +99,7 @@ where
     /// Add match guard to a scope.
     ///
     /// ```rust
-    /// use actix_web::{web, guard, App, HttpRequest, HttpResponse};
+    /// use actori_web::{web, guard, App, HttpRequest, HttpResponse};
     ///
     /// async fn index(data: web::Path<(String, String)>) -> &'static str {
     ///     "Welcome!"
@@ -126,7 +126,7 @@ where
     ///
     /// ```rust
     /// use std::cell::Cell;
-    /// use actix_web::{web, App, HttpResponse, Responder};
+    /// use actori_web::{web, App, HttpResponse, Responder};
     ///
     /// struct MyData {
     ///     counter: Cell<usize>,
@@ -170,8 +170,8 @@ where
     /// some of the resource's configuration could be moved to different module.
     ///
     /// ```rust
-    /// # extern crate actix_web;
-    /// use actix_web::{web, middleware, App, HttpResponse};
+    /// # extern crate actori_web;
+    /// use actori_web::{web, middleware, App, HttpResponse};
     ///
     /// // this function could be located in different module
     /// fn config(cfg: &mut web::ServiceConfig) {
@@ -216,14 +216,14 @@ where
     ///
     /// This is similar to `App's` service registration.
     ///
-    /// Actix web provides several services implementations:
+    /// Actori web provides several services implementations:
     ///
     /// * *Resource* is an entry in resource table which corresponds to requested URL.
     /// * *Scope* is a set of resources with common root path.
     /// * "StaticFiles" is a service for static files support
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpRequest};
+    /// use actori_web::{web, App, HttpRequest};
     ///
     /// struct AppState;
     ///
@@ -255,7 +255,7 @@ where
     /// multiple resources with one route would be registered for same resource path.
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpResponse};
+    /// use actori_web::{web, App, HttpResponse};
     ///
     /// async fn index(data: web::Path<(String, String)>) -> &'static str {
     ///     "Welcome!"
@@ -351,9 +351,9 @@ where
     /// can not modify ServiceResponse.
     ///
     /// ```rust
-    /// use actix_service::Service;
-    /// use actix_web::{web, App};
-    /// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};
+    /// use actori_service::Service;
+    /// use actori_web::{web, App};
+    /// use actori_web::http::{header::CONTENT_TYPE, HeaderValue};
     ///
     /// async fn index() -> &'static str {
     ///     "Welcome!"
@@ -661,7 +661,7 @@ impl ServiceFactory for ScopeEndpoint {
 
 #[cfg(test)]
 mod tests {
-    use actix_service::Service;
+    use actori_service::Service;
     use bytes::Bytes;
     use futures::future::ok;
 
@@ -672,7 +672,7 @@ mod tests {
     use crate::test::{call_service, init_service, read_body, TestRequest};
     use crate::{guard, web, App, HttpRequest, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope() {
         let mut srv = init_service(
             App::new().service(
@@ -687,7 +687,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_root() {
         let mut srv = init_service(
             App::new().service(
@@ -707,7 +707,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::CREATED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_root2() {
         let mut srv = init_service(App::new().service(
             web::scope("/app/").service(web::resource("").to(|| HttpResponse::Ok())),
@@ -723,7 +723,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_root3() {
         let mut srv = init_service(App::new().service(
             web::scope("/app/").service(web::resource("/").to(|| HttpResponse::Ok())),
@@ -739,7 +739,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_route() {
         let mut srv = init_service(
             App::new().service(
@@ -767,7 +767,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_route_without_leading_slash() {
         let mut srv = init_service(
             App::new().service(
@@ -797,7 +797,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::METHOD_NOT_ALLOWED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_guard() {
         let mut srv = init_service(
             App::new().service(
@@ -821,7 +821,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_variable_segment() {
         let mut srv =
             init_service(App::new().service(web::scope("/ab-{project}").service(
@@ -851,7 +851,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested_scope() {
         let mut srv = init_service(
             App::new().service(
@@ -868,7 +868,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::CREATED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested_scope_no_slash() {
         let mut srv = init_service(
             App::new().service(
@@ -885,7 +885,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::CREATED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested_scope_root() {
         let mut srv = init_service(
             App::new().service(
@@ -907,7 +907,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::CREATED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested_scope_filter() {
         let mut srv = init_service(
             App::new().service(
@@ -933,7 +933,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested_scope_with_variable_segment() {
         let mut srv = init_service(App::new().service(web::scope("/app").service(
             web::scope("/{project_id}").service(web::resource("/path1").to(
@@ -960,7 +960,7 @@ mod tests {
         }
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_nested2_scope_with_variable_segment() {
         let mut srv = init_service(App::new().service(web::scope("/app").service(
             web::scope("/{project}").service(web::scope("/{id}").service(
@@ -994,7 +994,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_resource() {
         let mut srv = init_service(
             App::new().service(
@@ -1016,7 +1016,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NOT_FOUND);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_resource_propagation() {
         let mut srv = init_service(
             App::new()
@@ -1043,7 +1043,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::METHOD_NOT_ALLOWED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_middleware() {
         let mut srv =
             init_service(
@@ -1070,7 +1070,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_middleware_fn() {
         let mut srv = init_service(
             App::new().service(
@@ -1100,7 +1100,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_override_data() {
         let mut srv = init_service(App::new().data(1usize).service(
             web::scope("app").data(10usize).route(
@@ -1119,7 +1119,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_override_app_data() {
         let mut srv = init_service(App::new().app_data(web::Data::new(1usize)).service(
             web::scope("app").app_data(web::Data::new(10usize)).route(
@@ -1138,7 +1138,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_config() {
         let mut srv =
             init_service(App::new().service(web::scope("/app").configure(|s| {
@@ -1151,7 +1151,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_scope_config_2() {
         let mut srv =
             init_service(App::new().service(web::scope("/app").configure(|s| {
@@ -1166,7 +1166,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_url_for_external() {
         let mut srv =
             init_service(App::new().service(web::scope("/app").configure(|s| {
@@ -1199,7 +1199,7 @@ mod tests {
         assert_eq!(body, &b"https://youtube.com/watch/xxxxxx"[..]);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_url_for_nested() {
         let mut srv = init_service(App::new().service(web::scope("/a").service(
             web::scope("/b").service(web::resource("/c/{stuff}").name("c").route(

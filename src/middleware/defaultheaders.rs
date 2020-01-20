@@ -3,7 +3,7 @@ use std::convert::TryFrom;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_service::{Service, Transform};
+use actori_service::{Service, Transform};
 use futures::future::{ok, FutureExt, LocalBoxFuture, Ready};
 
 use crate::http::header::{HeaderName, HeaderValue, CONTENT_TYPE};
@@ -16,7 +16,7 @@ use crate::Error;
 /// This middleware does not set header if response headers already contains it.
 ///
 /// ```rust
-/// use actix_web::{web, http, middleware, App, HttpResponse};
+/// use actori_web::{web, http, middleware, App, HttpResponse};
 ///
 /// fn main() {
 ///     let app = App::new()
@@ -156,7 +156,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use actix_service::IntoService;
+    use actori_service::IntoService;
     use futures::future::ok;
 
     use super::*;
@@ -165,7 +165,7 @@ mod tests {
     use crate::test::{ok_service, TestRequest};
     use crate::HttpResponse;
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_headers() {
         let mut mw = DefaultHeaders::new()
             .header(CONTENT_TYPE, "0001")
@@ -191,7 +191,7 @@ mod tests {
         assert_eq!(resp.headers().get(CONTENT_TYPE).unwrap(), "0002");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_content_type() {
         let srv =
             |req: ServiceRequest| ok(req.into_response(HttpResponse::Ok().finish()));

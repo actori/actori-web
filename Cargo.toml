@@ -1,13 +1,13 @@
 [package]
-name = "actix-web"
+name = "actori-web"
 version = "2.0.0"
-authors = ["Nikolay Kim <fafhrd91@gmail.com>"]
-description = "Actix web is a simple, pragmatic and extremely fast web framework for Rust."
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Actori web is a simple, pragmatic and extremely fast web framework for Rust."
 readme = "README.md"
-keywords = ["actix", "http", "web", "framework", "async"]
-homepage = "https://actix.rs"
-repository = "https://github.com/actix/actix-web.git"
-documentation = "https://docs.rs/actix-web/"
+keywords = ["actori", "http", "web", "framework", "async"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-web/"
 categories = ["network-programming", "asynchronous",
               "web-programming::http-server",
               "web-programming::websocket"]
@@ -18,26 +18,26 @@ edition = "2018"
 features = ["openssl", "rustls", "compress", "secure-cookies"]
 
 [badges]
-travis-ci = { repository = "actix/actix-web", branch = "master" }
-codecov = { repository = "actix/actix-web", branch = "master", service = "github" }
+travis-ci = { repository = "actori/actori-web", branch = "master" }
+codecov = { repository = "actori/actori-web", branch = "master", service = "github" }
 
 [lib]
-name = "actix_web"
+name = "actori_web"
 path = "src/lib.rs"
 
 [workspace]
 members = [
   ".",
-  "awc",
-  "actix-http",
-  "actix-cors",
-  "actix-files",
-  "actix-framed",
-  "actix-session",
-  "actix-identity",
-  "actix-multipart",
-  "actix-web-actors",
-  "actix-web-codegen",
+  "actoriwc",
+  "actori-http",
+  "actori-cors",
+  "actori-files",
+  "actori-framed",
+  "actori-session",
+  "actori-identity",
+  "actori-multipart",
+  "actori-web-actors",
+  "actori-web-codegen",
   "test-server",
 ]
 
@@ -45,34 +45,34 @@ members = [
 default = ["compress", "failure"]
 
 # content-encoding support
-compress = ["actix-http/compress", "awc/compress"]
+compress = ["actori-http/compress", "actoriwc/compress"]
 
 # sessions feature, session require "ring" crate and c compiler
-secure-cookies = ["actix-http/secure-cookies"]
+secure-cookies = ["actori-http/secure-cookies"]
 
-failure = ["actix-http/failure"]
+failure = ["actori-http/failure"]
 
 # openssl
-openssl = ["actix-tls/openssl", "awc/openssl", "open-ssl"]
+openssl = ["actori-tls/openssl", "actoriwc/openssl", "open-ssl"]
 
 # rustls
-rustls = ["actix-tls/rustls", "awc/rustls", "rust-tls"]
+rustls = ["actori-tls/rustls", "actoriwc/rustls", "rust-tls"]
 
 [dependencies]
-actix-codec = "0.2.0"
-actix-service = "1.0.2"
-actix-utils = "1.0.6"
-actix-router = "0.2.4"
-actix-rt = "1.0.0"
-actix-server = "1.0.0"
-actix-testing = "1.0.0"
-actix-macros = "0.1.0"
-actix-threadpool = "0.3.1"
-actix-tls = "1.0.0"
+actori-codec = "0.2.0"
+actori-service = "1.0.5"
+actori-utils = "1.0.6"
+actori-router = "0.2.4"
+actori-rt = "1.0.0"
+actori-server = "1.0.1"
+actori-testing = "1.0.0"
+actori-macros = "0.1.1"
+actori-threadpool = "0.3.1"
+actori-tls = "1.0.0"
 
-actix-web-codegen = "0.2.0"
-actix-http = "1.0.1"
-awc = { version = "1.0.1", default-features = false }
+actori-web-codegen = "0.2.0"
+actori-http = "1.0.1"
+actoriwc = { version = "1.0.1", default-features = false }
 
 bytes = "0.5.3"
 derive_more = "0.99.2"
@@ -93,7 +93,7 @@ open-ssl = { version="0.10", package = "openssl", optional = true }
 rust-tls = { version = "0.16.0", package = "rustls", optional = true }
 
 [dev-dependencies]
-actix = "0.9.0"
+actori = "0.9.0"
 rand = "0.7"
 env_logger = "0.6"
 serde_derive = "1.0"
@@ -106,13 +106,13 @@ opt-level = 3
 codegen-units = 1
 
 [patch.crates-io]
-actix-web = { path = "." }
-actix-http = { path = "actix-http" }
-actix-http-test = { path = "test-server" }
-actix-web-codegen = { path = "actix-web-codegen" }
-actix-cors = { path = "actix-cors" }
-actix-identity = { path = "actix-identity" }
-actix-session = { path = "actix-session" }
-actix-files = { path = "actix-files" }
-actix-multipart = { path = "actix-multipart" }
-awc = { path = "awc" }
+actori-web = { path = "." }
+actori-http = { path = "actori-http" }
+actori-http-test = { path = "test-server" }
+actori-web-codegen = { path = "actori-web-codegen" }
+actori-cors = { path = "actori-cors" }
+actori-identity = { path = "actori-identity" }
+actori-session = { path = "actori-session" }
+actori-files = { path = "actori-files" }
+actori-multipart = { path = "actori-multipart" }
+actoriwc = { path = "actoriwc" }

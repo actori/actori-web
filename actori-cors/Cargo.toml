@@ -1,0 +1,26 @@
+[package]
+name = "actori-cors"
+version = "0.2.0"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Cross-origin resource sharing (CORS) for Actori applications."
+readme = "README.md"
+keywords = ["web", "framework"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-cors/"
+license = "MIT/Apache-2.0"
+edition = "2018"
+workspace = ".."
+
+[lib]
+name = "actori_cors"
+path = "src/lib.rs"
+
+[dependencies]
+actori-web = "2.0.0"
+actori-service = "1.0.5"
+derive_more = "0.99.2"
+futures = "0.3.1"
+
+[dev-dependencies]
+actori-rt = "1.0.0"

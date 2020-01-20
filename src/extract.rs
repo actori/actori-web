@@ -3,7 +3,7 @@ use std::future::Future;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use actix_http::error::Error;
+use actori_http::error::Error;
 use futures::future::{ok, FutureExt, LocalBoxFuture, Ready};
 
 use crate::dev::Payload;
@@ -48,8 +48,8 @@ pub trait FromRequest: Sized {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, dev, App, Error, HttpRequest, FromRequest};
-/// use actix_web::error::ErrorBadRequest;
+/// use actori_web::{web, dev, App, Error, HttpRequest, FromRequest};
+/// use actori_web::error::ErrorBadRequest;
 /// use futures::future::{ok, err, Ready};
 /// use serde_derive::Deserialize;
 /// use rand;
@@ -120,8 +120,8 @@ where
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, dev, App, Result, Error, HttpRequest, FromRequest};
-/// use actix_web::error::ErrorBadRequest;
+/// use actori_web::{web, dev, App, Result, Error, HttpRequest, FromRequest};
+/// use actori_web::error::ErrorBadRequest;
 /// use futures::future::{ok, err, Ready};
 /// use serde_derive::Deserialize;
 /// use rand;
@@ -266,7 +266,7 @@ tuple_from_req!(TupleFromRequest10, (0, A), (1, B), (2, C), (3, D), (4, E), (5, 
 
 #[cfg(test)]
 mod tests {
-    use actix_http::http::header;
+    use actori_http::http::header;
     use bytes::Bytes;
     use serde_derive::Deserialize;
 
@@ -279,7 +279,7 @@ mod tests {
         hello: String,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_option() {
         let (req, mut pl) = TestRequest::with_header(
             header::CONTENT_TYPE,
@@ -325,7 +325,7 @@ mod tests {
         assert_eq!(r, None);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_result() {
         let (req, mut pl) = TestRequest::with_header(
             header::CONTENT_TYPE,

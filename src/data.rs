@@ -1,8 +1,8 @@
 use std::ops::Deref;
 use std::sync::Arc;
 
-use actix_http::error::{Error, ErrorInternalServerError};
-use actix_http::Extensions;
+use actori_http::error::{Error, ErrorInternalServerError};
+use actori_http::Extensions;
 use futures::future::{err, ok, Ready};
 
 use crate::dev::Payload;
@@ -38,7 +38,7 @@ pub(crate) trait DataFactory {
 ///
 /// ```rust
 /// use std::sync::Mutex;
-/// use actix_web::{web, App, HttpResponse, Responder};
+/// use actori_web::{web, App, HttpResponse, Responder};
 ///
 /// struct MyData {
 ///     counter: usize,
@@ -135,7 +135,7 @@ impl<T: 'static> DataFactory for Data<T> {
 
 #[cfg(test)]
 mod tests {
-    use actix_service::Service;
+    use actori_service::Service;
     use std::sync::atomic::{AtomicUsize, Ordering};
 
     use super::*;
@@ -143,7 +143,7 @@ mod tests {
     use crate::test::{self, init_service, TestRequest};
     use crate::{web, App, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data_extractor() {
         let mut srv = init_service(App::new().data("TEST".to_string()).service(
             web::resource("/").to(|data: web::Data<String>| {
@@ -167,7 +167,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_app_data_extractor() {
         let mut srv =
             init_service(App::new().app_data(Data::new(10usize)).service(
@@ -189,7 +189,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_route_data_extractor() {
         let mut srv =
             init_service(App::new().service(web::resource("/").data(10usize).route(
@@ -218,7 +218,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_override_data() {
         let mut srv = init_service(App::new().data(1usize).service(
             web::resource("/").data(10usize).route(web::get().to(
@@ -236,7 +236,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data_drop() {
         struct TestData(Arc<AtomicUsize>);
 

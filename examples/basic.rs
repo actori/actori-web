@@ -1,4 +1,4 @@
-use actix_web::{get, middleware, web, App, HttpRequest, HttpResponse, HttpServer};
+use actori_web::{get, middleware, web, App, HttpRequest, HttpResponse, HttpServer};
 
 #[get("/resource1/{name}/index.html")]
 async fn index(req: HttpRequest, name: web::Path<String>) -> String {
@@ -16,9 +16,9 @@ async fn no_params() -> &'static str {
     "Hello world!\r\n"
 }
 
-#[actix_rt::main]
+#[actori_rt::main]
 async fn main() -> std::io::Result<()> {
-    std::env::set_var("RUST_LOG", "actix_server=info,actix_web=info");
+    std::env::set_var("RUST_LOG", "actori_server=info,actori_web=info");
     env_logger::init();
 
     HttpServer::new(|| {

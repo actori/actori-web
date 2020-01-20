@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 use std::rc::Rc;
 
-use actix_router::ResourceDef;
+use actori_router::ResourceDef;
 use fxhash::FxHashMap;
 use url::Url;
 

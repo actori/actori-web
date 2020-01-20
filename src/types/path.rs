@@ -2,8 +2,8 @@
 use std::sync::Arc;
 use std::{fmt, ops};
 
-use actix_http::error::{Error, ErrorNotFound};
-use actix_router::PathDeserializer;
+use actori_http::error::{Error, ErrorNotFound};
+use actori_router::PathDeserializer;
 use futures::future::{ready, Ready};
 use serde::de;
 
@@ -20,7 +20,7 @@ use crate::FromRequest;
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 ///
 /// /// extract path info from "/{username}/{count}/index.html" url
 /// /// {username} - deserializes to a String
@@ -41,7 +41,7 @@ use crate::FromRequest;
 /// implements `Deserialize` trait from *serde*.
 ///
 /// ```rust
-/// use actix_web::{web, App, Error};
+/// use actori_web::{web, App, Error};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -115,7 +115,7 @@ impl<T: fmt::Display> fmt::Display for Path<T> {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 ///
 /// /// extract path info from "/{username}/{count}/index.html" url
 /// /// {username} - deserializes to a String
@@ -136,7 +136,7 @@ impl<T: fmt::Display> fmt::Display for Path<T> {
 /// implements `Deserialize` trait from *serde*.
 ///
 /// ```rust
-/// use actix_web::{web, App, Error};
+/// use actori_web::{web, App, Error};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -194,8 +194,8 @@ where
 /// Path extractor configuration
 ///
 /// ```rust
-/// use actix_web::web::PathConfig;
-/// use actix_web::{error, web, App, FromRequest, HttpResponse};
+/// use actori_web::web::PathConfig;
+/// use actori_web::{error, web, App, FromRequest, HttpResponse};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize, Debug)]
@@ -249,7 +249,7 @@ impl Default for PathConfig {
 
 #[cfg(test)]
 mod tests {
-    use actix_router::ResourceDef;
+    use actori_router::ResourceDef;
     use derive_more::Display;
     use serde_derive::Deserialize;
 
@@ -270,7 +270,7 @@ mod tests {
         value: u32,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_extract_path_single() {
         let resource = ResourceDef::new("/{value}/");
 
@@ -282,7 +282,7 @@ mod tests {
         assert!(Path::<MyStruct>::from_request(&req, &mut pl).await.is_err());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_tuple_extract() {
         let resource = ResourceDef::new("/{key}/{value}/");
 
@@ -309,7 +309,7 @@ mod tests {
         let () = <()>::from_request(&req, &mut pl).await.unwrap();
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_extract() {
         let mut req = TestRequest::with_uri("/name/user1/?id=test").to_srv_request();
 
@@ -357,7 +357,7 @@ mod tests {
         assert_eq!(res[1], "32".to_owned());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_custom_err_handler() {
         let (req, mut pl) = TestRequest::with_uri("/name/user1/")
             .app_data(PathConfig::default().error_handler(|err, _| {

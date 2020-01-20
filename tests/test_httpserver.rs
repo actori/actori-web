@@ -5,7 +5,7 @@ use std::{net, thread, time::Duration};
 #[cfg(feature = "openssl")]
 use open_ssl::ssl::SslAcceptorBuilder;
 
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actori_web::{web, App, HttpResponse, HttpServer};
 
 fn unused_addr() -> net::SocketAddr {
     let addr: net::SocketAddr = "127.0.0.1:0".parse().unwrap();
@@ -17,13 +17,13 @@ fn unused_addr() -> net::SocketAddr {
 }
 
 #[cfg(unix)]
-#[actix_rt::test]
+#[actori_rt::test]
 async fn test_start() {
     let addr = unused_addr();
     let (tx, rx) = mpsc::channel();
 
     thread::spawn(move || {
-        let sys = actix_rt::System::new("test");
+        let sys = actori_rt::System::new("test");
 
         let srv = HttpServer::new(|| {
             App::new().service(
@@ -44,16 +44,16 @@ async fn test_start() {
         .unwrap()
         .run();
 
-        let _ = tx.send((srv, actix_rt::System::current()));
+        let _ = tx.send((srv, actori_rt::System::current()));
         let _ = sys.run();
     });
     let (srv, sys) = rx.recv().unwrap();
 
     #[cfg(feature = "client")]
     {
-        use actix_http::client;
+        use actori_http::client;
 
-        let client = awc::Client::build()
+        let client = actoriwc::Client::build()
             .connector(
                 client::Connector::new()
                     .timeout(Duration::from_millis(100))
@@ -87,16 +87,16 @@ fn ssl_acceptor() -> std::io::Result<SslAcceptorBuilder> {
     Ok(builder)
 }
 
-#[actix_rt::test]
+#[actori_rt::test]
 #[cfg(feature = "openssl")]
 async fn test_start_ssl() {
-    use actix_web::HttpRequest;
+    use actori_web::HttpRequest;
 
     let addr = unused_addr();
     let (tx, rx) = mpsc::channel();
 
     thread::spawn(move || {
-        let sys = actix_rt::System::new("test");
+        let sys = actori_rt::System::new("test");
         let builder = ssl_acceptor().unwrap();
 
         let srv = HttpServer::new(|| {
@@ -113,7 +113,7 @@ async fn test_start_ssl() {
         .unwrap()
         .run();
 
-        let _ = tx.send((srv, actix_rt::System::current()));
+        let _ = tx.send((srv, actori_rt::System::current()));
         let _ = sys.run();
     });
     let (srv, sys) = rx.recv().unwrap();
@@ -125,9 +125,9 @@ async fn test_start_ssl() {
         .set_alpn_protos(b"\x02h2\x08http/1.1")
         .map_err(|e| log::error!("Can not set alpn protocol: {:?}", e));
 
-    let client = awc::Client::build()
+    let client = actoriwc::Client::build()
         .connector(
-            awc::Connector::new()
+            actoriwc::Connector::new()
                 .ssl(builder.build())
                 .timeout(Duration::from_millis(100))
                 .finish(),

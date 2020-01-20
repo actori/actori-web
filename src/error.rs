@@ -1,5 +1,5 @@
 //! Error and Result module
-pub use actix_http::error::*;
+pub use actori_http::error::*;
 use derive_more::{Display, From};
 use serde_json::error::Error as JsonError;
 use url::ParseError as UrlParseError;

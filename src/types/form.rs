@@ -6,7 +6,7 @@ use std::rc::Rc;
 use std::task::{Context, Poll};
 use std::{fmt, ops};
 
-use actix_http::{Error, HttpMessage, Payload, Response};
+use actori_http::{Error, HttpMessage, Payload, Response};
 use bytes::BytesMut;
 use encoding_rs::{Encoding, UTF_8};
 use futures::future::{err, ok, FutureExt, LocalBoxFuture, Ready};
@@ -40,7 +40,7 @@ use crate::responder::Responder;
 ///
 /// ### Example
 /// ```rust
-/// use actix_web::web;
+/// use actori_web::web;
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -65,7 +65,7 @@ use crate::responder::Responder;
 ///
 /// ### Example
 /// ```rust
-/// use actix_web::*;
+/// use actori_web::*;
 /// use serde_derive::Serialize;
 ///
 /// #[derive(Serialize)]
@@ -76,10 +76,10 @@ use crate::responder::Responder;
 ///
 /// // Will return a 200 response with header
 /// // `Content-Type: application/x-www-form-urlencoded`
-/// // and body "name=actix&age=123"
+/// // and body "name=actori&age=123"
 /// fn index() -> web::Form<SomeForm> {
 ///     web::Form(SomeForm {
-///         name: "actix".into(),
+///         name: "actori".into(),
 ///         age: 123
 ///     })
 /// }
@@ -172,7 +172,7 @@ impl<T: Serialize> Responder for Form<T> {
 /// Form extractor configuration
 ///
 /// ```rust
-/// use actix_web::{web, App, FromRequest, Result};
+/// use actori_web::{web, App, FromRequest, Result};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -386,7 +386,7 @@ mod tests {
         counter: i64,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_form() {
         let (req, mut pl) =
             TestRequest::with_header(CONTENT_TYPE, "application/x-www-form-urlencoded")
@@ -422,7 +422,7 @@ mod tests {
         }
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_urlencoded_error() {
         let (req, mut pl) =
             TestRequest::with_header(CONTENT_TYPE, "application/x-www-form-urlencoded")
@@ -448,7 +448,7 @@ mod tests {
         assert!(eq(info.err().unwrap(), UrlencodedError::ContentType));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_urlencoded() {
         let (req, mut pl) =
             TestRequest::with_header(CONTENT_TYPE, "application/x-www-form-urlencoded")
@@ -483,7 +483,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_responder() {
         let req = TestRequest::default().to_http_request();
 

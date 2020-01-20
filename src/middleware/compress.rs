@@ -6,11 +6,11 @@ use std::pin::Pin;
 use std::str::FromStr;
 use std::task::{Context, Poll};
 
-use actix_http::body::MessageBody;
-use actix_http::encoding::Encoder;
-use actix_http::http::header::{ContentEncoding, ACCEPT_ENCODING};
-use actix_http::Error;
-use actix_service::{Service, Transform};
+use actori_http::body::MessageBody;
+use actori_http::encoding::Encoder;
+use actori_http::http::header::{ContentEncoding, ACCEPT_ENCODING};
+use actori_http::Error;
+use actori_service::{Service, Transform};
 use futures::future::{ok, Ready};
 use pin_project::pin_project;
 
@@ -24,7 +24,7 @@ use crate::service::{ServiceRequest, ServiceResponse};
 /// To disable compression set encoding to `ContentEncoding::Identity` value.
 ///
 /// ```rust
-/// use actix_web::{web, middleware, App, HttpResponse};
+/// use actori_web::{web, middleware, App, HttpResponse};
 ///
 /// fn main() {
 ///     let app = App::new()

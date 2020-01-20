@@ -2,7 +2,7 @@
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_service::{Service, Transform};
+use actori_service::{Service, Transform};
 use futures::future::{ok, FutureExt, LocalBoxFuture, Ready};
 use fxhash::FxHashMap;
 
@@ -29,8 +29,8 @@ type ErrorHandler<B> = dyn Fn(ServiceResponse<B>) -> Result<ErrorHandlerResponse
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::middleware::errhandlers::{ErrorHandlers, ErrorHandlerResponse};
-/// use actix_web::{web, http, dev, App, HttpRequest, HttpResponse, Result};
+/// use actori_web::middleware::errhandlers::{ErrorHandlers, ErrorHandlerResponse};
+/// use actori_web::{web, http, dev, App, HttpRequest, HttpResponse, Result};
 ///
 /// fn render_500<B>(mut res: dev::ServiceResponse<B>) -> Result<ErrorHandlerResponse<B>> {
 ///     res.response_mut()
@@ -146,7 +146,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use actix_service::IntoService;
+    use actori_service::IntoService;
     use futures::future::ok;
 
     use super::*;
@@ -161,7 +161,7 @@ mod tests {
         Ok(ErrorHandlerResponse::Response(res))
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_handler() {
         let srv = |req: ServiceRequest| {
             ok(req.into_response(HttpResponse::InternalServerError().finish()))
@@ -187,7 +187,7 @@ mod tests {
         Ok(ErrorHandlerResponse::Future(ok(res).boxed_local()))
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_handler_async() {
         let srv = |req: ServiceRequest| {
             ok(req.into_response(HttpResponse::InternalServerError().finish()))

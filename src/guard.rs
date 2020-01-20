@@ -1,10 +1,10 @@
 //! Route match guards.
 //!
-//! Guards are one of the ways how actix-web router chooses a
+//! Guards are one of the ways how actori-web router chooses a
 //! handler service. In essence it is just a function that accepts a
 //! reference to a `RequestHead` instance and returns a boolean.
 //! It is possible to add guards to *scopes*, *resources*
-//! and *routes*. Actix provide several guards by default, like various
+//! and *routes*. Actori provide several guards by default, like various
 //! http methods, header, etc. To become a guard, type must implement `Guard`
 //! trait. Simple functions coulds guards as well.
 //!
@@ -13,7 +13,7 @@
 //! Extensions containers are available via the `RequestHead::extensions()` method.
 //!
 //! ```rust
-//! use actix_web::{web, http, dev, guard, App, HttpResponse};
+//! use actori_web::{web, http, dev, guard, App, HttpResponse};
 //!
 //! fn main() {
 //!     App::new().service(web::resource("/index.html").route(
@@ -27,8 +27,8 @@
 #![allow(non_snake_case)]
 use std::convert::TryFrom;
 
-use actix_http::http::{self, header, uri::Uri};
-use actix_http::RequestHead;
+use actori_http::http::{self, header, uri::Uri};
+use actori_http::RequestHead;
 
 /// Trait defines resource guards. Guards are used for route selection.
 ///
@@ -43,7 +43,7 @@ pub trait Guard {
 /// Create guard object for supplied function.
 ///
 /// ```rust
-/// use actix_web::{guard, web, App, HttpResponse};
+/// use actori_web::{guard, web, App, HttpResponse};
 ///
 /// fn main() {
 ///     App::new().service(web::resource("/index.html").route(
@@ -86,7 +86,7 @@ where
 /// Return guard that matches if any of supplied guards.
 ///
 /// ```rust
-/// use actix_web::{web, guard, App, HttpResponse};
+/// use actori_web::{web, guard, App, HttpResponse};
 ///
 /// fn main() {
 ///     App::new().service(web::resource("/index.html").route(
@@ -125,7 +125,7 @@ impl Guard for AnyGuard {
 /// Return guard that matches if all of the supplied guards.
 ///
 /// ```rust
-/// use actix_web::{guard, web, App, HttpResponse};
+/// use actori_web::{guard, web, App, HttpResponse};
 ///
 /// fn main() {
 ///     App::new().service(web::resource("/index.html").route(
@@ -260,7 +260,7 @@ impl Guard for HeaderGuard {
 /// Return predicate that matches if request contains specified Host name.
 ///
 /// ```rust
-/// use actix_web::{web, guard::Host, App, HttpResponse};
+/// use actori_web::{web, guard::Host, App, HttpResponse};
 ///
 /// fn main() {
 ///     App::new().service(
@@ -323,7 +323,7 @@ impl Guard for HostGuard {
 
 #[cfg(test)]
 mod tests {
-    use actix_http::http::{header, Method};
+    use actori_http::http::{header, Method};
 
     use super::*;
     use crate::test::TestRequest;

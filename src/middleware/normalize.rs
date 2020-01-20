@@ -1,8 +1,8 @@
 //! `Middleware` to normalize request's URI
 use std::task::{Context, Poll};
 
-use actix_http::http::{PathAndQuery, Uri};
-use actix_service::{Service, Transform};
+use actori_http::http::{PathAndQuery, Uri};
+use actori_service::{Service, Transform};
 use bytes::Bytes;
 use futures::future::{ok, Ready};
 use regex::Regex;
@@ -18,7 +18,7 @@ use crate::Error;
 /// - Merges multiple slashes into one.
 ///
 /// ```rust
-/// use actix_web::{web, http, middleware, App, HttpResponse};
+/// use actori_web::{web, http, middleware, App, HttpResponse};
 ///
 /// # fn main() {
 /// let app = App::new()
@@ -100,14 +100,14 @@ where
 
 #[cfg(test)]
 mod tests {
-    use actix_service::IntoService;
+    use actori_service::IntoService;
 
     use super::*;
     use crate::dev::ServiceRequest;
     use crate::test::{call_service, init_service, TestRequest};
     use crate::{web, App, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_wrap() {
         let mut app = init_service(
             App::new()
@@ -121,7 +121,7 @@ mod tests {
         assert!(res.status().is_success());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_in_place_normalization() {
         let srv = |req: ServiceRequest| {
             assert_eq!("/v1/something/", req.path());
@@ -138,7 +138,7 @@ mod tests {
         assert!(res.status().is_success());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn should_normalize_nothing() {
         const URI: &str = "/v1/something/";
 

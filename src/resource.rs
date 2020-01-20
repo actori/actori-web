@@ -5,10 +5,10 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_http::{Error, Extensions, Response};
-use actix_router::IntoPattern;
-use actix_service::boxed::{self, BoxService, BoxServiceFactory};
-use actix_service::{
+use actori_http::{Error, Extensions, Response};
+use actori_router::IntoPattern;
+use actori_service::boxed::{self, BoxService, BoxServiceFactory};
+use actori_service::{
     apply, apply_fn_factory, IntoServiceFactory, Service, ServiceFactory, Transform,
 };
 use futures::future::{ok, Either, LocalBoxFuture, Ready};
@@ -36,7 +36,7 @@ type HttpNewService = BoxServiceFactory<(), ServiceRequest, ServiceResponse, Err
 /// guards, route considered matched and route handler get called.
 ///
 /// ```rust
-/// use actix_web::{web, App, HttpResponse};
+/// use actori_web::{web, App, HttpResponse};
 ///
 /// fn main() {
 ///     let app = App::new().service(
@@ -96,7 +96,7 @@ where
     /// Add match guard to a resource.
     ///
     /// ```rust
-    /// use actix_web::{web, guard, App, HttpResponse};
+    /// use actori_web::{web, guard, App, HttpResponse};
     ///
     /// async fn index(data: web::Path<(String, String)>) -> &'static str {
     ///     "Welcome!"
@@ -129,7 +129,7 @@ where
     /// Register a new route.
     ///
     /// ```rust
-    /// use actix_web::{web, guard, App, HttpResponse};
+    /// use actori_web::{web, guard, App, HttpResponse};
     ///
     /// fn main() {
     ///     let app = App::new().service(
@@ -146,7 +146,7 @@ where
     /// match guards for route selection.
     ///
     /// ```rust
-    /// use actix_web::{web, guard, App};
+    /// use actori_web::{web, guard, App};
     ///
     /// fn main() {
     ///     let app = App::new().service(
@@ -156,9 +156,9 @@ where
     ///              .route(web::delete().to(delete_handler))
     ///     );
     /// }
-    /// # async fn get_handler() -> impl actix_web::Responder { actix_web::HttpResponse::Ok() }
-    /// # async fn post_handler() -> impl actix_web::Responder { actix_web::HttpResponse::Ok() }
-    /// # async fn delete_handler() -> impl actix_web::Responder { actix_web::HttpResponse::Ok() }
+    /// # async fn get_handler() -> impl actori_web::Responder { actori_web::HttpResponse::Ok() }
+    /// # async fn post_handler() -> impl actori_web::Responder { actori_web::HttpResponse::Ok() }
+    /// # async fn delete_handler() -> impl actori_web::Responder { actori_web::HttpResponse::Ok() }
     /// ```
     pub fn route(mut self, route: Route) -> Self {
         self.routes.push(route);
@@ -171,7 +171,7 @@ where
     /// Resource data overrides data registered by `App::data()` method.
     ///
     /// ```rust
-    /// use actix_web::{web, App, FromRequest};
+    /// use actori_web::{web, App, FromRequest};
     ///
     /// /// extract text data from request
     /// async fn index(body: String) -> String {
@@ -210,7 +210,7 @@ where
     /// Register a new route and add handler. This route matches all requests.
     ///
     /// ```rust
-    /// use actix_web::*;
+    /// use actori_web::*;
     ///
     /// fn index(req: HttpRequest) -> HttpResponse {
     ///     unimplemented!()
@@ -222,8 +222,8 @@ where
     /// This is shortcut for:
     ///
     /// ```rust
-    /// # extern crate actix_web;
-    /// # use actix_web::*;
+    /// # extern crate actori_web;
+    /// # use actori_web::*;
     /// # fn index(req: HttpRequest) -> HttpResponse { unimplemented!() }
     /// App::new().service(web::resource("/").route(web::route().to(index)));
     /// ```
@@ -288,9 +288,9 @@ where
     /// type (i.e modify response's body).
     ///
     /// ```rust
-    /// use actix_service::Service;
-    /// use actix_web::{web, App};
-    /// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};
+    /// use actori_service::Service;
+    /// use actori_web::{web, App};
+    /// use actori_web::http::{header::CONTENT_TYPE, HeaderValue};
     ///
     /// async fn index() -> &'static str {
     ///     "Welcome!"
@@ -582,8 +582,8 @@ impl ServiceFactory for ResourceEndpoint {
 mod tests {
     use std::time::Duration;
 
-    use actix_rt::time::delay_for;
-    use actix_service::Service;
+    use actori_rt::time::delay_for;
+    use actori_service::Service;
     use futures::future::ok;
 
     use crate::http::{header, HeaderValue, Method, StatusCode};
@@ -592,7 +592,7 @@ mod tests {
     use crate::test::{call_service, init_service, TestRequest};
     use crate::{guard, web, App, Error, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_middleware() {
         let mut srv =
             init_service(
@@ -616,7 +616,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_middleware_fn() {
         let mut srv = init_service(
             App::new().service(
@@ -646,7 +646,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_to() {
         let mut srv =
             init_service(App::new().service(web::resource("/test").to(|| {
@@ -661,7 +661,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_pattern() {
         let mut srv = init_service(
             App::new().service(
@@ -678,7 +678,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_resource() {
         let mut srv = init_service(
             App::new()
@@ -722,7 +722,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_resource_guards() {
         let mut srv = init_service(
             App::new()
@@ -763,7 +763,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::NO_CONTENT);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data() {
         let mut srv = init_service(
             App::new()

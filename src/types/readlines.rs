@@ -177,7 +177,7 @@ mod tests {
     use super::*;
     use crate::test::TestRequest;
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_readlines() {
         let mut req = TestRequest::default()
             .set_payload(Bytes::from_static(

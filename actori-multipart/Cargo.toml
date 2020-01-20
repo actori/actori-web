@@ -1,0 +1,33 @@
+[package]
+name = "actori-multipart"
+version = "0.2.0"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Multipart support for actori web framework."
+readme = "README.md"
+keywords = ["http", "web", "framework", "async", "futures"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-multipart/"
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[lib]
+name = "actori_multipart"
+path = "src/lib.rs"
+
+[dependencies]
+actori-web = { version = "2.0.0", default-features = false }
+actori-service = "1.0.5"
+actori-utils = "1.0.6"
+bytes = "0.5.3"
+derive_more = "0.99.2"
+httparse = "1.3"
+futures = "0.3.1"
+log = "0.4"
+mime = "0.3"
+time = "0.1"
+twoway = "0.2"
+
+[dev-dependencies]
+actori-rt = "1.0.0"
+actori-http = "1.0.1"

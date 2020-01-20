@@ -39,8 +39,8 @@ script:
   - |
     if [[ "$TRAVIS_RUST_VERSION" == "stable" || "$TRAVIS_RUST_VERSION" == "beta" ]]; then
       cargo test --all-features --all -- --nocapture
-      cd actix-http; cargo test --no-default-features --features="rustls" -- --nocapture; cd ..
-      cd awc; cargo test --no-default-features --features="rustls" -- --nocapture; cd ..
+      cd actori-http; cargo test --no-default-features --features="rustls" -- --nocapture; cd ..
+      cd actoriwc; cargo test --no-default-features --features="rustls" -- --nocapture; cd ..
     fi
 
 # Upload docs

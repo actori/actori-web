@@ -4,10 +4,10 @@ use std::future::Future;
 use std::marker::PhantomData;
 use std::rc::Rc;
 
-use actix_http::body::{Body, MessageBody};
-use actix_http::Extensions;
-use actix_service::boxed::{self, BoxServiceFactory};
-use actix_service::{
+use actori_http::body::{Body, MessageBody};
+use actori_http::Extensions;
+use actori_service::boxed::{self, BoxServiceFactory};
+use actori_service::{
     apply, apply_fn_factory, IntoServiceFactory, ServiceFactory, Transform,
 };
 use futures::future::{FutureExt, LocalBoxFuture};
@@ -84,7 +84,7 @@ where
     ///
     /// ```rust
     /// use std::cell::Cell;
-    /// use actix_web::{web, App, HttpResponse, Responder};
+    /// use actori_web::{web, App, HttpResponse, Responder};
     ///
     /// struct MyData {
     ///     counter: Cell<usize>,
@@ -157,8 +157,8 @@ where
     /// some of the resource's configuration could be moved to different module.
     ///
     /// ```rust
-    /// # extern crate actix_web;
-    /// use actix_web::{web, middleware, App, HttpResponse};
+    /// # extern crate actori_web;
+    /// use actori_web::{web, middleware, App, HttpResponse};
     ///
     /// // this function could be located in different module
     /// fn config(cfg: &mut web::ServiceConfig) {
@@ -194,7 +194,7 @@ where
     /// multiple resources with one route would be registered for same resource path.
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpResponse};
+    /// use actori_web::{web, App, HttpResponse};
     ///
     /// async fn index(data: web::Path<(String, String)>) -> &'static str {
     ///     "Welcome!"
@@ -218,7 +218,7 @@ where
     ///
     /// Http service is any type that implements `HttpServiceFactory` trait.
     ///
-    /// Actix web provides several services implementations:
+    /// Actori web provides several services implementations:
     ///
     /// * *Resource* is an entry in resource table which corresponds to requested URL.
     /// * *Scope* is a set of resources with common root path.
@@ -237,7 +237,7 @@ where
     /// It is possible to use services like `Resource`, `Route`.
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpResponse};
+    /// use actori_web::{web, App, HttpResponse};
     ///
     /// async fn index() -> &'static str {
     ///     "Welcome!"
@@ -255,7 +255,7 @@ where
     /// It is also possible to use static files as default service.
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpResponse};
+    /// use actori_web::{web, App, HttpResponse};
     ///
     /// fn main() {
     ///     let app = App::new()
@@ -292,7 +292,7 @@ where
     /// `HttpRequest::url_for()` will work as expected.
     ///
     /// ```rust
-    /// use actix_web::{web, App, HttpRequest, HttpResponse, Result};
+    /// use actori_web::{web, App, HttpRequest, HttpResponse, Result};
     ///
     /// async fn index(req: HttpRequest) -> Result<HttpResponse> {
     ///     let url = req.url_for("youtube", &["asdlkjqme"])?;
@@ -334,9 +334,9 @@ where
     /// in the builder chain is the *last* to execute during request processing.
     ///
     /// ```rust
-    /// use actix_service::Service;
-    /// use actix_web::{middleware, web, App};
-    /// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};
+    /// use actori_service::Service;
+    /// use actori_web::{middleware, web, App};
+    /// use actori_web::http::{header::CONTENT_TYPE, HeaderValue};
     ///
     /// async fn index() -> &'static str {
     ///     "Welcome!"
@@ -392,9 +392,9 @@ where
     /// Use middleware when you need to read or modify *every* request or response in some way.
     ///
     /// ```rust
-    /// use actix_service::Service;
-    /// use actix_web::{web, App};
-    /// use actix_web::http::{header::CONTENT_TYPE, HeaderValue};
+    /// use actori_service::Service;
+    /// use actori_web::{web, App};
+    /// use actori_web::http::{header::CONTENT_TYPE, HeaderValue};
     ///
     /// async fn index() -> &'static str {
     ///     "Welcome!"
@@ -474,7 +474,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use actix_service::Service;
+    use actori_service::Service;
     use bytes::Bytes;
     use futures::future::ok;
 
@@ -485,7 +485,7 @@ mod tests {
     use crate::test::{call_service, init_service, read_body, TestRequest};
     use crate::{web, HttpRequest, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_resource() {
         let mut srv = init_service(
             App::new().service(web::resource("/test").to(|| HttpResponse::Ok())),
@@ -530,7 +530,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::CREATED);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_data_factory() {
         let mut srv =
             init_service(App::new().data_factory(|| ok::<_, ()>(10usize)).service(
@@ -551,7 +551,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::INTERNAL_SERVER_ERROR);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_extension() {
         let mut srv = init_service(App::new().app_data(10usize).service(
             web::resource("/").to(|req: HttpRequest| {
@@ -565,7 +565,7 @@ mod tests {
         assert_eq!(resp.status(), StatusCode::OK);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_wrap() {
         let mut srv = init_service(
             App::new()
@@ -585,7 +585,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_router_wrap() {
         let mut srv = init_service(
             App::new()
@@ -605,7 +605,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_wrap_fn() {
         let mut srv = init_service(
             App::new()
@@ -632,7 +632,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_router_wrap_fn() {
         let mut srv = init_service(
             App::new()
@@ -659,7 +659,7 @@ mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_external_resource() {
         let mut srv = init_service(
             App::new()

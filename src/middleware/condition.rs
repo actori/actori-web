@@ -1,7 +1,7 @@
 //! `Middleware` for conditionally enables another middleware.
 use std::task::{Context, Poll};
 
-use actix_service::{Service, Transform};
+use actori_service::{Service, Transform};
 use futures::future::{ok, Either, FutureExt, LocalBoxFuture};
 
 /// `Middleware` for conditionally enables another middleware.
@@ -11,8 +11,8 @@ use futures::future::{ok, Either, FutureExt, LocalBoxFuture};
 /// ## Usage
 ///
 /// ```rust
-/// use actix_web::middleware::{Condition, NormalizePath};
-/// use actix_web::App;
+/// use actori_web::middleware::{Condition, NormalizePath};
+/// use actori_web::App;
 ///
 /// # fn main() {
 /// let enable_normalize = std::env::var("NORMALIZE_PATH") == Ok("true".into());
@@ -95,7 +95,7 @@ where
 
 #[cfg(test)]
 mod tests {
-    use actix_service::IntoService;
+    use actori_service::IntoService;
 
     use super::*;
     use crate::dev::{ServiceRequest, ServiceResponse};
@@ -112,7 +112,7 @@ mod tests {
         Ok(ErrorHandlerResponse::Response(res))
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_handler_enabled() {
         let srv = |req: ServiceRequest| {
             ok(req.into_response(HttpResponse::InternalServerError().finish()))
@@ -130,7 +130,7 @@ mod tests {
         assert_eq!(resp.headers().get(CONTENT_TYPE).unwrap(), "0001");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_handler_disabled() {
         let srv = |req: ServiceRequest| {
             ok(req.into_response(HttpResponse::InternalServerError().finish()))

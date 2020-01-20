@@ -4,11 +4,11 @@ use std::marker::PhantomData;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use actix_http::error::InternalError;
-use actix_http::http::{
+use actori_http::error::InternalError;
+use actori_http::http::{
     header::IntoHeaderValue, Error as HttpError, HeaderMap, HeaderName, StatusCode,
 };
-use actix_http::{Error, Response, ResponseBuilder};
+use actori_http::{Error, Response, ResponseBuilder};
 use bytes::{Bytes, BytesMut};
 use futures::future::{err, ok, Either as EitherFuture, Ready};
 use futures::ready;
@@ -32,7 +32,7 @@ pub trait Responder {
     /// Override a status code for a Responder.
     ///
     /// ```rust
-    /// use actix_web::{HttpRequest, Responder, http::StatusCode};
+    /// use actori_web::{HttpRequest, Responder, http::StatusCode};
     ///
     /// fn index(req: HttpRequest) -> impl Responder {
     ///     "Welcome!".with_status(StatusCode::OK)
@@ -49,7 +49,7 @@ pub trait Responder {
     /// Add header to the Responder's response.
     ///
     /// ```rust
-    /// use actix_web::{web, HttpRequest, Responder};
+    /// use actori_web::{web, HttpRequest, Responder};
     /// use serde::Serialize;
     ///
     /// #[derive(Serialize)]
@@ -235,7 +235,7 @@ impl<T: Responder> CustomResponder<T> {
     /// Override a status code for the Responder's response.
     ///
     /// ```rust
-    /// use actix_web::{HttpRequest, Responder, http::StatusCode};
+    /// use actori_web::{HttpRequest, Responder, http::StatusCode};
     ///
     /// fn index(req: HttpRequest) -> impl Responder {
     ///     "Welcome!".with_status(StatusCode::OK)
@@ -250,7 +250,7 @@ impl<T: Responder> CustomResponder<T> {
     /// Add header to the Responder's response.
     ///
     /// ```rust
-    /// use actix_web::{web, HttpRequest, Responder};
+    /// use actori_web::{web, HttpRequest, Responder};
     /// use serde::Serialize;
     ///
     /// #[derive(Serialize)]
@@ -335,7 +335,7 @@ impl<T: Responder> Future for CustomResponderFut<T> {
 /// Combines two different responder types into a single type
 ///
 /// ```rust
-/// use actix_web::{Either, Error, HttpResponse};
+/// use actori_web::{Either, Error, HttpResponse};
 ///
 /// type RegisterResult = Either<HttpResponse, Result<HttpResponse, Error>>;
 ///
@@ -453,7 +453,7 @@ where
 
 #[cfg(test)]
 pub(crate) mod tests {
-    use actix_service::Service;
+    use actori_service::Service;
     use bytes::{Bytes, BytesMut};
 
     use super::*;
@@ -462,7 +462,7 @@ pub(crate) mod tests {
     use crate::test::{init_service, TestRequest};
     use crate::{error, web, App, HttpResponse};
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_option_responder() {
         let mut srv = init_service(
             App::new()
@@ -515,7 +515,7 @@ pub(crate) mod tests {
         }
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_responder() {
         let req = TestRequest::default().to_http_request();
 
@@ -580,7 +580,7 @@ pub(crate) mod tests {
         assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_result_responder() {
         let req = TestRequest::default().to_http_request();
 
@@ -603,7 +603,7 @@ pub(crate) mod tests {
         assert!(res.is_err());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_custom_responder() {
         let req = TestRequest::default().to_http_request();
         let res = "test"
@@ -630,7 +630,7 @@ pub(crate) mod tests {
         );
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_tuple_responder_with_status_code() {
         let req = TestRequest::default().to_http_request();
         let res = ("test".to_string(), StatusCode::BAD_REQUEST)

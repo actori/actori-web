@@ -102,7 +102,7 @@
 
 ### Fixed
 
-* awc client panic #1016
+* actoriwc client panic #1016
 
 * Invalid response with compression middleware enabled, but compression-related features disabled #997
 

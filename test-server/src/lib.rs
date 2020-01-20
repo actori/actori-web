@@ -5,7 +5,7 @@ use std::{net, thread, time};
 use actori_codec::{AsyncRead, AsyncWrite, Framed};
 use actori_rt::{net::TcpStream, System};
 use actori_server::{Server, ServiceFactory};
-use awc::{error::PayloadError, ws, Client, ClientRequest, ClientResponse, Connector};
+use actoriwc::{error::PayloadError, ws, Client, ClientRequest, ClientResponse, Connector};
 use bytes::Bytes;
 use futures::Stream;
 use http::Method;
@@ -231,7 +231,7 @@ impl TestServer {
     pub async fn ws_at(
         &mut self,
         path: &str,
-    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, awc::error::WsClientError>
+    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, actoriwc::error::WsClientError>
     {
         let url = self.url(path);
         let connect = self.client.ws(url).connect();
@@ -241,7 +241,7 @@ impl TestServer {
     /// Connect to a websocket server
     pub async fn ws(
         &mut self,
-    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, awc::error::WsClientError>
+    ) -> Result<Framed<impl AsyncRead + AsyncWrite, ws::Codec>, actoriwc::error::WsClientError>
     {
         self.ws_at("/").await
     }

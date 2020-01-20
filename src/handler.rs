@@ -4,8 +4,8 @@ use std::marker::PhantomData;
 use std::pin::Pin;
 use std::task::{Context, Poll};
 
-use actix_http::{Error, Response};
-use actix_service::{Service, ServiceFactory};
+use actori_http::{Error, Response};
+use actori_service::{Service, ServiceFactory};
 use futures::future::{ok, Ready};
 use futures::ready;
 use pin_project::pin_project;

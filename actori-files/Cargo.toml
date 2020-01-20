@@ -1,0 +1,36 @@
+[package]
+name = "actori-files"
+version = "0.2.1"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Static files support for actori web."
+readme = "README.md"
+keywords = ["actori", "http", "async", "futures"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-files/"
+categories = ["asynchronous", "web-programming::http-server"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+workspace = ".."
+
+[lib]
+name = "actori_files"
+path = "src/lib.rs"
+
+[dependencies]
+actori-web = { version = "2.0.0", default-features = false }
+actori-http = "1.0.1"
+actori-service = "1.0.5"
+bitflags = "1"
+bytes = "0.5.3"
+futures = "0.3.1"
+derive_more = "0.99.2"
+log = "0.4"
+mime = "0.3"
+mime_guess = "2.0.1"
+percent-encoding = "2.1"
+v_htmlescape = "0.4"
+
+[dev-dependencies]
+actori-rt = "1.0.0"
+actori-web = { version = "2.0.0", features=["openssl"] }

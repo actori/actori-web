@@ -1,0 +1,29 @@
+[package]
+name = "actori-identity"
+version = "0.2.1"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Identity service for actori web framework."
+readme = "README.md"
+keywords = ["http", "web", "framework", "async", "futures"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-identity/"
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[lib]
+name = "actori_identity"
+path = "src/lib.rs"
+
+[dependencies]
+actori-web = { version = "2.0.0", default-features = false, features = ["secure-cookies"] }
+actori-service = "1.0.5"
+futures = "0.3.1"
+serde = "1.0"
+serde_json = "1.0"
+time = "0.1.42"
+
+[dev-dependencies]
+actori-rt = "1.0.0"
+actori-http = "1.0.1"
+bytes = "0.5.3"

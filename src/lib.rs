@@ -4,17 +4,17 @@
     clippy::type_complexity,
     clippy::borrow_interior_mutable_const
 )]
-//! Actix web is a small, pragmatic, and extremely fast web framework
+//! Actori web is a small, pragmatic, and extremely fast web framework
 //! for Rust.
 //!
 //! ```rust,no_run
-//! use actix_web::{web, App, Responder, HttpServer};
+//! use actori_web::{web, App, Responder, HttpServer};
 //!
 //! async fn index(info: web::Path<(String, u32)>) -> impl Responder {
 //!     format!("Hello {}! id:{}", info.0, info.1)
 //! }
 //!
-//! #[actix_rt::main]
+//! #[actori_rt::main]
 //! async fn main() -> std::io::Result<()> {
 //!     HttpServer::new(|| App::new().service(
 //!         web::resource("/{name}/{id}/index.html").to(index))
@@ -30,15 +30,15 @@
 //! Besides the API documentation (which you are currently looking
 //! at!), several other resources are available:
 //!
-//! * [User Guide](https://actix.rs/docs/)
-//! * [Chat on gitter](https://gitter.im/actix/actix)
-//! * [GitHub repository](https://github.com/actix/actix-web)
-//! * [Cargo package](https://crates.io/crates/actix-web)
+//! * [User Guide](https://actori.t42x.net/docs/)
+//! * [Chat on gitter](https://gitter.im/actori/actori)
+//! * [GitHub repository](https://github.com/actori/actori-web)
+//! * [Cargo package](https://crates.io/crates/actori-web)
 //!
 //! To get started navigating the API documentation you may want to
 //! consider looking at the following pages:
 //!
-//! * [App](struct.App.html): This struct represents an actix-web
+//! * [App](struct.App.html): This struct represents an actori-web
 //!   application and is used to configure routes and other common
 //!   settings.
 //!
@@ -65,7 +65,7 @@
 //! * Multipart streams
 //! * SSL support with OpenSSL or `native-tls`
 //! * Middlewares (`Logger`, `Session`, `CORS`, `DefaultHeaders`)
-//! * Supports [Actix actor framework](https://github.com/actix/actix)
+//! * Supports [Actori actor framework](https://github.com/actori/actori)
 //! * Supported Rust version: 1.39 or later
 //!
 //! ## Package feature
@@ -101,11 +101,11 @@ mod types;
 pub mod web;
 
 #[doc(hidden)]
-pub use actix_web_codegen::*;
+pub use actori_web_codegen::*;
 
 // re-export for convenience
-pub use actix_http::Response as HttpResponse;
-pub use actix_http::{body, cookie, http, Error, HttpMessage, ResponseError, Result};
+pub use actori_http::Response as HttpResponse;
+pub use actori_http::{body, cookie, http, Error, HttpMessage, ResponseError, Result};
 
 pub use crate::app::App;
 pub use crate::extract::FromRequest;
@@ -117,14 +117,14 @@ pub use crate::scope::Scope;
 pub use crate::server::HttpServer;
 
 pub mod dev {
-    //! The `actix-web` prelude for library developers
+    //! The `actori-web` prelude for library developers
     //!
-    //! The purpose of this module is to alleviate imports of many common actix
-    //! traits by adding a glob import to the top of actix heavy modules:
+    //! The purpose of this module is to alleviate imports of many common actori
+    //! traits by adding a glob import to the top of actori heavy modules:
     //!
     //! ```
     //! # #![allow(unused_imports)]
-    //! use actix_web::dev::*;
+    //! use actori_web::dev::*;
     //! ```
 
     pub use crate::config::{AppConfig, AppService};
@@ -140,16 +140,16 @@ pub mod dev {
     pub use crate::types::json::JsonBody;
     pub use crate::types::readlines::Readlines;
 
-    pub use actix_http::body::{Body, BodySize, MessageBody, ResponseBody, SizedStream};
+    pub use actori_http::body::{Body, BodySize, MessageBody, ResponseBody, SizedStream};
     #[cfg(feature = "compress")]
-    pub use actix_http::encoding::Decoder as Decompress;
-    pub use actix_http::ResponseBuilder as HttpResponseBuilder;
-    pub use actix_http::{
+    pub use actori_http::encoding::Decoder as Decompress;
+    pub use actori_http::ResponseBuilder as HttpResponseBuilder;
+    pub use actori_http::{
         Extensions, Payload, PayloadStream, RequestHead, ResponseHead,
     };
-    pub use actix_router::{Path, ResourceDef, ResourcePath, Url};
-    pub use actix_server::Server;
-    pub use actix_service::{Service, Transform};
+    pub use actori_router::{Path, ResourceDef, ResourcePath, Url};
+    pub use actori_server::Server;
+    pub use actori_service::{Service, Transform};
 
     pub(crate) fn insert_slash(mut patterns: Vec<String>) -> Vec<String> {
         for path in &mut patterns {
@@ -161,7 +161,7 @@ pub mod dev {
     }
 
     use crate::http::header::ContentEncoding;
-    use actix_http::{Response, ResponseBuilder};
+    use actori_http::{Response, ResponseBuilder};
 
     struct Enc(ContentEncoding);
 
@@ -209,24 +209,24 @@ pub mod client {
     //! An HTTP Client
     //!
     //! ```rust
-    //! use actix_web::client::Client;
+    //! use actori_web::client::Client;
     //!
-    //! #[actix_rt::main]
+    //! #[actori_rt::main]
     //! async fn main() {
     //!    let mut client = Client::default();
     //!
     //!    // Create request builder and send request
     //!    let response = client.get("http://www.rust-lang.org")
-    //!       .header("User-Agent", "Actix-web")
+    //!       .header("User-Agent", "Actori-web")
     //!       .send().await;                      // <- Send http request
     //!
     //!    println!("Response: {:?}", response);
     //! }
     //! ```
-    pub use awc::error::{
+    pub use actoriwc::error::{
         ConnectError, InvalidUrl, PayloadError, SendRequestError, WsClientError,
     };
-    pub use awc::{
+    pub use actoriwc::{
         test, Client, ClientBuilder, ClientRequest, ClientResponse, Connector,
     };
 }

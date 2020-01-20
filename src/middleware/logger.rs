@@ -9,7 +9,7 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_service::{Service, Transform};
+use actori_service::{Service, Transform};
 use bytes::Bytes;
 use futures::future::{ok, Ready};
 use log::debug;
@@ -25,7 +25,7 @@ use crate::HttpResponse;
 /// `Middleware` for logging request and response info to the terminal.
 ///
 /// `Logger` middleware uses standard log crate to log information. You should
-/// enable logger for `actix_web` package to see access log.
+/// enable logger for `actori_web` package to see access log.
 /// ([`env_logger`](https://docs.rs/env_logger/*/env_logger/) or similar)
 ///
 /// ## Usage
@@ -38,11 +38,11 @@ use crate::HttpResponse;
 ///  %a "%r" %s %b "%{Referer}i" "%{User-Agent}i" %T
 /// ```
 /// ```rust
-/// use actix_web::middleware::Logger;
-/// use actix_web::App;
+/// use actori_web::middleware::Logger;
+/// use actori_web::App;
 ///
 /// fn main() {
-///     std::env::set_var("RUST_LOG", "actix_web=info");
+///     std::env::set_var("RUST_LOG", "actori_web=info");
 ///     env_logger::init();
 ///
 ///     let app = App::new()
@@ -475,14 +475,14 @@ impl<'a> fmt::Display for FormatDisplay<'a> {
 
 #[cfg(test)]
 mod tests {
-    use actix_service::{IntoService, Service, Transform};
+    use actori_service::{IntoService, Service, Transform};
     use futures::future::ok;
 
     use super::*;
     use crate::http::{header, StatusCode};
     use crate::test::TestRequest;
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_logger() {
         let srv = |req: ServiceRequest| {
             ok(req.into_response(
@@ -503,7 +503,7 @@ mod tests {
         let _res = srv.call(req).await;
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_url_path() {
         let mut format = Format::new("%T %U");
         let req = TestRequest::with_header(
@@ -534,7 +534,7 @@ mod tests {
         assert!(s.contains("/test/route/yeah"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_default_format() {
         let mut format = Format::default();
 
@@ -567,7 +567,7 @@ mod tests {
         assert!(s.contains("ACTIX-WEB"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_time_format() {
         let mut format = Format::new("%t");
         let req = TestRequest::default().to_srv_request();

@@ -3,7 +3,7 @@
 use std::sync::Arc;
 use std::{fmt, ops};
 
-use actix_http::error::Error;
+use actori_http::error::Error;
 use futures::future::{err, ok, Ready};
 use serde::de;
 use serde_urlencoded;
@@ -24,7 +24,7 @@ use crate::request::HttpRequest;
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Debug, Deserialize)]
@@ -102,7 +102,7 @@ impl<T: fmt::Display> fmt::Display for Query<T> {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Debug, Deserialize)]
@@ -172,7 +172,7 @@ where
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{error, web, App, FromRequest, HttpResponse};
+/// use actori_web::{error, web, App, FromRequest, HttpResponse};
 /// use serde_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
@@ -224,7 +224,7 @@ impl Default for QueryConfig {
 
 #[cfg(test)]
 mod tests {
-    use actix_http::http::StatusCode;
+    use actori_http::http::StatusCode;
     use derive_more::Display;
     use serde_derive::Deserialize;
 
@@ -238,7 +238,7 @@ mod tests {
         id: String,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_service_request_extract() {
         let req = TestRequest::with_uri("/name/user1/").to_srv_request();
         assert!(Query::<Id>::from_query(&req.query_string()).is_err());
@@ -254,7 +254,7 @@ mod tests {
         assert_eq!(s.id, "test1");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_request_extract() {
         let req = TestRequest::with_uri("/name/user1/").to_srv_request();
         let (req, mut pl) = req.into_parts();
@@ -272,7 +272,7 @@ mod tests {
         assert_eq!(s.id, "test1");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_custom_error_responder() {
         let req = TestRequest::with_uri("/name/user1/")
             .app_data(QueryConfig::default().error_handler(|e, _| {

@@ -2,23 +2,23 @@ use std::marker::PhantomData;
 use std::sync::{Arc, Mutex};
 use std::{fmt, io, net};
 
-use actix_http::{body::MessageBody, Error, HttpService, KeepAlive, Request, Response};
-use actix_server::{Server, ServerBuilder};
-use actix_service::{map_config, IntoServiceFactory, Service, ServiceFactory};
+use actori_http::{body::MessageBody, Error, HttpService, KeepAlive, Request, Response};
+use actori_server::{Server, ServerBuilder};
+use actori_service::{map_config, IntoServiceFactory, Service, ServiceFactory};
 
 use net2::TcpBuilder;
 
 #[cfg(unix)]
-use actix_http::Protocol;
+use actori_http::Protocol;
 #[cfg(unix)]
-use actix_service::pipeline_factory;
+use actori_service::pipeline_factory;
 #[cfg(unix)]
 use futures::future::ok;
 
 #[cfg(feature = "openssl")]
-use actix_tls::openssl::{AlpnError, SslAcceptor, SslAcceptorBuilder};
+use actori_tls::openssl::{AlpnError, SslAcceptor, SslAcceptorBuilder};
 #[cfg(feature = "rustls")]
-use actix_tls::rustls::ServerConfig as RustlsServerConfig;
+use actori_tls::rustls::ServerConfig as RustlsServerConfig;
 
 use crate::config::AppConfig;
 
@@ -39,9 +39,9 @@ struct Config {
 /// Create new http server with application factory.
 ///
 /// ```rust,no_run
-/// use actix_web::{web, App, HttpResponse, HttpServer};
+/// use actori_web::{web, App, HttpResponse, HttpServer};
 ///
-/// #[actix_rt::main]
+/// #[actori_rt::main]
 /// async fn main() -> std::io::Result<()> {
 ///     HttpServer::new(
 ///         || App::new()
@@ -140,7 +140,7 @@ where
     ///
     /// By default max connections is set to a 256.
     pub fn maxconnrate(self, num: usize) -> Self {
-        actix_tls::max_concurrent_ssl_connect(num);
+        actori_tls::max_concurrent_ssl_connect(num);
         self
     }
 
@@ -191,7 +191,7 @@ where
         self
     }
 
-    /// Stop actix system.
+    /// Stop actori system.
     pub fn system_exit(mut self) -> Self {
         self.builder = self.builder.system_exit();
         self
@@ -244,7 +244,7 @@ where
         });
 
         self.builder = self.builder.listen(
-            format!("actix-web-service-{}", addr),
+            format!("actori-web-service-{}", addr),
             lst,
             move || {
                 let c = cfg.lock().unwrap();
@@ -292,7 +292,7 @@ where
         });
 
         self.builder = self.builder.listen(
-            format!("actix-web-service-{}", addr),
+            format!("actori-web-service-{}", addr),
             lst,
             move || {
                 let c = cfg.lock().unwrap();
@@ -339,7 +339,7 @@ where
         });
 
         self.builder = self.builder.listen(
-            format!("actix-web-service-{}", addr),
+            format!("actori-web-service-{}", addr),
             lst,
             move || {
                 let c = cfg.lock().unwrap();
@@ -449,7 +449,7 @@ where
         mut self,
         lst: std::os::unix::net::UnixListener,
     ) -> io::Result<Self> {
-        use actix_rt::net::UnixStream;
+        use actori_rt::net::UnixStream;
 
         let cfg = self.config.clone();
         let factory = self.factory.clone();
@@ -462,7 +462,7 @@ where
             addr: socket_addr,
         });
 
-        let addr = format!("actix-web-service-{:?}", lst.local_addr()?);
+        let addr = format!("actori-web-service-{:?}", lst.local_addr()?);
 
         self.builder = self.builder.listen_uds(addr, lst, move || {
             let c = cfg.lock().unwrap();
@@ -489,7 +489,7 @@ where
     where
         A: AsRef<std::path::Path>,
     {
-        use actix_rt::net::UnixStream;
+        use actori_rt::net::UnixStream;
 
         let cfg = self.config.clone();
         let factory = self.factory.clone();
@@ -503,7 +503,7 @@ where
         });
 
         self.builder = self.builder.bind_uds(
-            format!("actix-web-service-{:?}", addr.as_ref()),
+            format!("actori-web-service-{:?}", addr.as_ref()),
             addr,
             move || {
                 let c = cfg.lock().unwrap();
@@ -542,14 +542,14 @@ where
     /// For each address this method starts separate thread which does
     /// `accept()` in a loop.
     ///
-    /// This methods panics if no socket address can be bound or an `Actix` system is not yet
+    /// This methods panics if no socket address can be bound or an `Actori` system is not yet
     /// configured.
     ///
     /// ```rust,no_run
     /// use std::io;
-    /// use actix_web::{web, App, HttpResponse, HttpServer};
+    /// use actori_web::{web, App, HttpResponse, HttpServer};
     ///
-    /// #[actix_rt::main]
+    /// #[actori_rt::main]
     /// async fn main() -> io::Result<()> {
     ///     HttpServer::new(|| App::new().service(web::resource("/").to(|| HttpResponse::Ok())))
     ///         .bind("127.0.0.1:0")?

@@ -5,10 +5,10 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_http::{Extensions, Request, Response};
-use actix_router::{Path, ResourceDef, ResourceInfo, Router, Url};
-use actix_service::boxed::{self, BoxService, BoxServiceFactory};
-use actix_service::{fn_service, Service, ServiceFactory};
+use actori_http::{Extensions, Request, Response};
+use actori_router::{Path, ResourceDef, ResourceInfo, Router, Url};
+use actori_service::boxed::{self, BoxService, BoxServiceFactory};
+use actori_service::{fn_service, Service, ServiceFactory};
 use futures::future::{ok, FutureExt, LocalBoxFuture};
 
 use crate::config::{AppConfig, AppService};
@@ -447,7 +447,7 @@ mod tests {
 
     use crate::test::{init_service, TestRequest};
     use crate::{web, App, HttpResponse};
-    use actix_service::Service;
+    use actori_service::Service;
 
     struct DropData(Arc<AtomicBool>);
 
@@ -457,7 +457,7 @@ mod tests {
         }
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_drop_data() {
         let data = Arc::new(AtomicBool::new(false));
 

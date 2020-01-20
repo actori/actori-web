@@ -2,14 +2,14 @@ use std::cell::{Ref, RefMut};
 use std::rc::Rc;
 use std::{fmt, net};
 
-use actix_http::body::{Body, MessageBody, ResponseBody};
-use actix_http::http::{HeaderMap, Method, StatusCode, Uri, Version};
-use actix_http::{
+use actori_http::body::{Body, MessageBody, ResponseBody};
+use actori_http::http::{HeaderMap, Method, StatusCode, Uri, Version};
+use actori_http::{
     Error, Extensions, HttpMessage, Payload, PayloadStream, RequestHead, Response,
     ResponseHead,
 };
-use actix_router::{IntoPattern, Path, Resource, ResourceDef, Url};
-use actix_service::{IntoServiceFactory, ServiceFactory};
+use actori_router::{IntoPattern, Path, Resource, ResourceDef, Url};
+use actori_service::{IntoServiceFactory, ServiceFactory};
 
 use crate::config::{AppConfig, AppService};
 use crate::data::Data;
@@ -171,7 +171,7 @@ impl ServiceRequest {
     /// Peer socket address
     ///
     /// Peer address is actual socket address, if proxy is used in front of
-    /// actix http server, then peer address would be address of this proxy.
+    /// actori http server, then peer address would be address of this proxy.
     ///
     /// To get client connection information `ConnectionInfo` should be used.
     #[inline]
@@ -448,7 +448,7 @@ impl WebService {
     /// Add match guard to a web service.
     ///
     /// ```rust
-    /// use actix_web::{web, guard, dev, App, Error, HttpResponse};
+    /// use actori_web::{web, guard, dev, App, Error, HttpResponse};
     ///
     /// async fn index(req: dev::ServiceRequest) -> Result<dev::ServiceResponse, Error> {
     ///     Ok(req.into_response(HttpResponse::Ok().finish()))
@@ -530,7 +530,7 @@ mod tests {
     use super::*;
     use crate::test::{init_service, TestRequest};
     use crate::{guard, http, web, App, HttpResponse};
-    use actix_service::Service;
+    use actori_service::Service;
     use futures::future::ok;
 
     #[test]
@@ -554,7 +554,7 @@ mod tests {
         assert!(ServiceRequest::from_request(r).is_err());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_service() {
         let mut srv = init_service(
             App::new().service(web::service("/test").name("test").finish(

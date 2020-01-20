@@ -4,8 +4,8 @@ use std::pin::Pin;
 use std::str;
 use std::task::{Context, Poll};
 
-use actix_http::error::{Error, ErrorBadRequest, PayloadError};
-use actix_http::HttpMessage;
+use actori_http::error::{Error, ErrorBadRequest, PayloadError};
+use actori_http::HttpMessage;
 use bytes::{Bytes, BytesMut};
 use encoding_rs::UTF_8;
 use futures::future::{err, ok, Either, FutureExt, LocalBoxFuture, Ready};
@@ -23,7 +23,7 @@ use crate::request::HttpRequest;
 ///
 /// ```rust
 /// use futures::{Future, Stream, StreamExt};
-/// use actix_web::{web, error, App, Error, HttpResponse};
+/// use actori_web::{web, error, App, Error, HttpResponse};
 ///
 /// /// extract binary data from request
 /// async fn index(mut body: web::Payload) -> Result<HttpResponse, Error>
@@ -71,7 +71,7 @@ impl Stream for Payload {
 ///
 /// ```rust
 /// use futures::{Future, Stream, StreamExt};
-/// use actix_web::{web, error, App, Error, HttpResponse};
+/// use actori_web::{web, error, App, Error, HttpResponse};
 ///
 /// /// extract binary data from request
 /// async fn index(mut body: web::Payload) -> Result<HttpResponse, Error>
@@ -114,7 +114,7 @@ impl FromRequest for Payload {
 ///
 /// ```rust
 /// use bytes::Bytes;
-/// use actix_web::{web, App};
+/// use actori_web::{web, App};
 ///
 /// /// extract binary data from request
 /// async fn index(body: Bytes) -> String {
@@ -166,7 +166,7 @@ impl FromRequest for Bytes {
 /// ## Example
 ///
 /// ```rust
-/// use actix_web::{web, App, FromRequest};
+/// use actori_web::{web, App, FromRequest};
 ///
 /// /// extract text data from request
 /// async fn index(text: String) -> String {
@@ -405,7 +405,7 @@ mod tests {
     use crate::http::header;
     use crate::test::TestRequest;
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_payload_config() {
         let req = TestRequest::default().to_http_request();
         let cfg = PayloadConfig::default().mimetype(mime::APPLICATION_JSON);
@@ -423,7 +423,7 @@ mod tests {
         assert!(cfg.check_mimetype(&req).is_ok());
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_bytes() {
         let (req, mut pl) = TestRequest::with_header(header::CONTENT_LENGTH, "11")
             .set_payload(Bytes::from_static(b"hello=world"))
@@ -433,7 +433,7 @@ mod tests {
         assert_eq!(s, Bytes::from_static(b"hello=world"));
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_string() {
         let (req, mut pl) = TestRequest::with_header(header::CONTENT_LENGTH, "11")
             .set_payload(Bytes::from_static(b"hello=world"))
@@ -443,7 +443,7 @@ mod tests {
         assert_eq!(s, "hello=world");
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_message_body() {
         let (req, mut pl) = TestRequest::with_header(header::CONTENT_LENGTH, "xxxx")
             .to_srv_request()

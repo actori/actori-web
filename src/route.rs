@@ -3,8 +3,8 @@ use std::pin::Pin;
 use std::rc::Rc;
 use std::task::{Context, Poll};
 
-use actix_http::{http::Method, Error};
-use actix_service::{Service, ServiceFactory};
+use actori_http::{http::Method, Error};
+use actori_service::{Service, ServiceFactory};
 use futures::future::{ready, FutureExt, LocalBoxFuture};
 
 use crate::extract::FromRequest;
@@ -140,7 +140,7 @@ impl Route {
     /// Add method guard to the route.
     ///
     /// ```rust
-    /// # use actix_web::*;
+    /// # use actori_web::*;
     /// # fn main() {
     /// App::new().service(web::resource("/path").route(
     ///     web::get()
@@ -160,7 +160,7 @@ impl Route {
     /// Add guard to the route.
     ///
     /// ```rust
-    /// # use actix_web::*;
+    /// # use actori_web::*;
     /// # fn main() {
     /// App::new().service(web::resource("/path").route(
     ///     web::route()
@@ -178,7 +178,7 @@ impl Route {
     /// Set handler function, use request extractors for parameters.
     ///
     /// ```rust
-    /// use actix_web::{web, http, App};
+    /// use actori_web::{web, http, App};
     /// use serde_derive::Deserialize;
     ///
     /// #[derive(Deserialize)]
@@ -204,7 +204,7 @@ impl Route {
     /// ```rust
     /// # use std::collections::HashMap;
     /// # use serde_derive::Deserialize;
-    /// use actix_web::{web, App};
+    /// use actori_web::{web, App};
     ///
     /// #[derive(Deserialize)]
     /// struct Info {
@@ -342,7 +342,7 @@ where
 mod tests {
     use std::time::Duration;
 
-    use actix_rt::time::delay_for;
+    use actori_rt::time::delay_for;
     use bytes::Bytes;
     use serde_derive::Serialize;
 
@@ -355,7 +355,7 @@ mod tests {
         name: String,
     }
 
-    #[actix_rt::test]
+    #[actori_rt::test]
     async fn test_route() {
         let mut srv = init_service(
             App::new()

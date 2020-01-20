@@ -92,6 +92,7 @@ fail-ure = { version = "0.1.5", package="failure", optional = true }
 [dev-dependencies]
 actori-server = "1.0.1"
 actori-connect = { version = "1.0.2", features=["openssl"] }
+actori-http-test = { version = "1.0.0", features=["openssl"] }
 actori-tls = { version = "1.0.0", features=["openssl"] }
 futures = "0.3.1"
 env_logger = "0.6"
