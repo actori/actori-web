@@ -1,0 +1,37 @@
+[package]
+name = "actori-framed"
+version = "0.3.0"
+authors = ["Christian Haynes <06chaynes@gmail.com>", "Nikolay Kim <fafhrd91@gmail.com>"]
+description = "Actori framed app server"
+readme = "README.md"
+keywords = ["http", "web", "framework", "async", "futures"]
+homepage = "https://actori.t42x.net"
+repository = "https://github.com/actori/actori-web.git"
+documentation = "https://docs.rs/actori-framed/"
+categories = ["network-programming", "asynchronous",
+              "web-programming::http-server",
+              "web-programming::websocket"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+
+[lib]
+name = "actori_framed"
+path = "src/lib.rs"
+
+[dependencies]
+actori-codec = "0.2.0"
+actori-service = "1.0.5"
+actori-router = "0.2.4"
+actori-rt = "1.0.0"
+actori-http = "1.0.1"
+
+bytes = "0.5.3"
+futures = "0.3.1"
+pin-project = "0.4.6"
+log = "0.4"
+
+[dev-dependencies]
+actori-server = "1.0.0"
+actori-connect = { version = "1.0.0", features=["openssl"] }
+actori-http-test = { version = "1.0.0", features=["openssl"] }
+actori-utils = "1.0.3"
